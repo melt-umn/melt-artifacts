@@ -8,11 +8,18 @@ if [ ! -f $JARFILE ]; then
     if ! ./silver-compile; then #exit on Silver compiler error
         exit 1
     fi
+    echo ""
 fi
 
-if command -v rlwrap; then
-    rlwrap sh -c ./.run
-else
-    ./.run
-fi
+echo -e -n "\e[4;32mEnter an expression:\e[m  "
+read entered
 
+while [ -n "$entered" ]; do
+    java -jar $JARFILE "$entered"
+    echo ""
+    echo ""
+    echo -e -n "\e[4;32mEnter an expression:\e[m  "
+    read entered
+done
+
+echo ""
