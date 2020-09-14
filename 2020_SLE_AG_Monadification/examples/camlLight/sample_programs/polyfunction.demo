@@ -1,0 +1,24 @@
+
+
+let f = function x -> x in (f 3, f "3") ;;
+
+
+let f = function x -> x in
+let g = function x -> x in
+(f 3, g "3") ;;
+
+
+let f = function x -> x in
+let h = f 3 in
+f "3" ;;
+
+
+let f = fun a b -> a + b in (f 3 4, f "3" "4") ;;
+
+
+type 'a myList =
+  mynil
+| mycons of ('a * 'a myList) ;;
+
+mynil, mynil ;;
+

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+JARFILE=stlc.jar
+
+
+if [ ! -f $JARFILE ]; then
+    echo -e "\e[1;31mFile $JARFILE not found; building it\e[m"
+    if ! ./silver-compile; then #exit on Silver compiler error
+        exit 1
+    fi
+fi
+
+if command -v rlwrap; then
+    rlwrap sh -c ./.run
+else
+    ./.run
+fi
+

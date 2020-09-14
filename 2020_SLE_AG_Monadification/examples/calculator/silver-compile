@@ -1,0 +1,6 @@
+#!/bin/bash
+
+GRAMMAR=calculator
+
+silver --clean -I .. $GRAMMAR
+

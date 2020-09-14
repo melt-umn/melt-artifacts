@@ -1,0 +1,27 @@
+
+
+exception aExp ;;
+
+exception bExp of string
+        | cExp of int ;;
+
+try 3 + 4 with
+  aExp -> 5
+| bExp s -> 6
+| cExp n -> n ;;
+
+
+try "should fail" with
+  aExp -> 5
+| bExp s -> 6
+| cExp n -> n ;;
+
+
+try "string" with
+  aExp -> "5"
+| bExp s -> s
+| cExp n -> "n" ;;
+
+
+exception shouldFailExp of 'a ;;
+

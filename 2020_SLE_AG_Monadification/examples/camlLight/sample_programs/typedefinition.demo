@@ -1,0 +1,49 @@
+
+type 'a myList =
+  mynil
+| mycons of ('a * 'a myList);;
+
+
+type 'a foo =
+  fc1 of 'a bar
+| fc2
+and  'a bar =
+  bc1 of 'a foo
+| bc2 ;;
+
+
+type ('a, 'b) either =
+  left of 'a 
+| right of 'b ;;
+
+
+type ('a, 'b) myPair =
+  mypair of ('a * 'b) ;;
+
+
+
+type shouldFail1 =
+  constructor1
+| constructor1 ;;
+
+
+type shouldFail2 =
+  constructor2 of shouldFail3
+and shouldFail3 =
+  constructor2 of shouldFail2 ;;
+
+
+type shouldFail3 =
+  aoeu
+| mynil ;;
+
+
+type shouldFail4 =
+  i of nonexistentType ;;
+
+type 'a shouldFail5 =
+  j of 'a nonexistentParameterizedType ;;
+
+type shouldFail6 =
+  k of 'a ;;
+
