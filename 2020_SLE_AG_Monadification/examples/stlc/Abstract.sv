@@ -60,7 +60,7 @@ abstract production var
 top::Expression ::= name::String
 {
   implicit top.typ = case lookupType(name, top.gamma) of
-                     | just(x) -> right(x)
+                     | just(x) -> x
                      | nothing() -> left("Unknown variable " ++ name)
                      end;
   unrestricted top.errors = case top.typ of
@@ -95,12 +95,12 @@ top::Expression ::= name::String ty::Type body::Expression
   restricted body.substV = top.substV;
   restricted body.substE = top.substE;
   restricted top.substed = if top.substV == name
-                         then top
-                         else abs(name, ty, body.substed);
+                           then top
+                           else abs(name, ty, body.substed);
 
   implicit top.nextStep = ;
 
-  unrestricted top.pp = "lambda " ++ name ++ ":" ++ ty.pp ++ "." ++ body.pp;
+  unrestricted top.pp = "lambda " ++ name ++ ":" ++ ty.pp ++ ". " ++ body.pp;
 }
 
 
