@@ -6,19 +6,13 @@ imports core:monad;
 
 Restricted inherited attribute gamma::[Pair<String Type>];
 Implicit synthesized attribute typ::Either<String Type>;
-{-A second try to avoid these problems:  We only add an error from the
-  top if the two children's types are not errors.-}
 Unrestricted synthesized attribute errors::[String];
 
---nondeterministic evaluation
-Implicit synthesized attribute next::[Expression];
 Restricted inherited attribute substV::String;
 Restricted inherited attribute substE::Expression;
 Restricted synthesized attribute substed::Expression;
 Restricted synthesized attribute isvalue::Boolean;
-
---deterministic evaluation
-Implicit synthesized attribute nextStep::Maybe<Expression>;  --synthesized attribute nextStep::~Implicit Maybe<Expression>;
+Implicit synthesized attribute nextStep::Maybe<Expression>;
 
 Unrestricted synthesized attribute pp::String;
 
@@ -35,9 +29,8 @@ Maybe<Type> ::= name::String gamma::[Pair<String Type>]
 }
 
 
-synthesized attribute steps::[[Expression]]; --nondeterministic
 synthesized attribute singleSteps::[Expression]; --deterministic
-nonterminal Root with pp, typ, next, errors, steps, nextStep, singleSteps;
+nonterminal Root with pp, typ, errors, nextStep, singleSteps;
 
 abstract production root
 top::Root ::= e::Expression
@@ -46,28 +39,21 @@ top::Root ::= e::Expression
   implicit top.typ = e.typ;
   unrestricted top.errors = e.errors;
 
-  implicit top.next = e.next;
-
   unrestricted top.pp = e.pp;
 
-  top.steps = if null(e.next)
-              then [[e]]
-              else foldr(\x::Expression r::[[Expression]] -> map(\y::[Expression] -> e::y, root(x).steps) ++ r, [], e.next);
+  implicit top.nextStep = e.nextStep;
 
-   implicit top.nextStep = e.nextStep;
-
-   top.singleSteps = case e.nextStep of
-                     | just(x) -> e::root(x).singleSteps
-                     | nothing() -> [e]
-                     end;
+  top.singleSteps = case e.nextStep of
+                    | just(x) -> e::root(x).singleSteps
+                    | nothing() -> [e]
+                    end;
 }
 
 
 
 nonterminal Expression with
    gamma, typ, errors,
-   next, substV, substE, substed, isvalue,
-   nextStep,
+   substV, substE, substed, isvalue, nextStep,
    pp;
 
 abstract production var
@@ -83,7 +69,6 @@ top::Expression ::= name::String
                              end;
 
   restricted top.isvalue = false;
-  implicit top.next = ;
 
   restricted top.substed = if top.substV == name
                            then top.substE
@@ -106,7 +91,6 @@ top::Expression ::= name::String ty::Type body::Expression
                             end;
 
   restricted top.isvalue = true;
-  implicit top.next = ;
 
   restricted body.substV = top.substV;
   restricted body.substE = top.substE;
@@ -136,12 +120,6 @@ top::Expression ::= t1::Expression t2::Expression
                             end;
 
   restricted top.isvalue = false;
-  implicit top.next = case_any t1, t2 of
-                      | abs(n, t, b), v when v.isvalue ->
-                        decorate b with {substV=n; substE=v;}.substed
-                      | _, _ -> app(t1.next, t2)
-                      | _, _ -> app(t1, t2.next)
-                      end;
 
   restricted t1.substV = top.substV;
   restricted t2.substV = top.substV;
@@ -175,13 +153,6 @@ top::Expression ::= t1::Expression t2::Expression
                             end;
 
   restricted top.isvalue = false;
-  implicit top.next = case_any t1, t2 of
-                      | tru_a(), _ -> tru_a()
-                      | _, tru_a() -> tru_a()
-                      | fals_a(), fals_a() -> fals_a()
-                      | _, _ -> or(t1.next, t2)
-                      | _, _ -> or(t1, t2.next)
-                      end;
 
   restricted t1.substV = top.substV;
   restricted t2.substV = top.substV;
@@ -214,13 +185,6 @@ top::Expression ::= t1::Expression t2::Expression
                             end;
 
   restricted top.isvalue = false;
-  implicit top.next = case_any t1, t2 of
-                      | tru_a(), tru_a() -> tru_a()
-                      | _, fals_a() -> fals_a()
-                      | fals_a(), _ -> fals_a()
-                      | _, _ -> and(t1.next, t2)
-                      | _, _ -> and(t1, t2.next)
-                      end;
 
   restricted t1.substV = top.substV;
   restricted t2.substV = top.substV;
@@ -245,7 +209,6 @@ top::Expression ::=
   unrestricted top.errors = [];
 
   restricted top.isvalue = true;
-  implicit top.next = ;
 
   restricted top.substed = top;
 
@@ -262,7 +225,6 @@ top::Expression ::=
   unrestricted top.errors = [];
 
   restricted top.isvalue = true;
-  implicit top.next = ;
 
   restricted top.substed = top;
 
@@ -286,11 +248,6 @@ top::Expression ::= e::Expression
                             end;
 
   restricted top.isvalue = false;
-  implicit top.next = case_any e of
-                      | tru_a() -> fals_a()
-                      | fals_a() -> tru_a()
-                      | _ -> not(e.next)
-                      end;
 
   restricted e.substV = top.substV;
   restricted e.substE = top.substE;

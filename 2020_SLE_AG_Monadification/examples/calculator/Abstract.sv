@@ -29,6 +29,16 @@ top::Root ::= e::Expression
 nonterminal Expression with pp, value, imp_value;
 
 
+abstract production num
+top::Expression ::= n::Float
+{
+  top.pp = toString(n);
+
+  implicit top.imp_value = n;
+
+  top.value = just(n);
+}
+
 abstract production plus
 top::Expression ::= t1::Expression t2::Expression
 {
@@ -82,15 +92,5 @@ top::Expression ::= t1::Expression t2::Expression
                                       else nothing()
               | _, _ -> nothing()
               end;
-}
-
-abstract production num
-top::Expression ::= n::Float
-{
-  top.pp = toString(n);
-
-  implicit top.imp_value = n;
-
-  top.value = just(n);
 }
 
