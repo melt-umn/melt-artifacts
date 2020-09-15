@@ -1,0 +1,10 @@
+
+This artifact demonstrates the strategy attributes introduced in our
+SLE paper "Strategic Tree Rewriting in Attribute Grammars."  These new
+kinds of attributes allow rewriting strategies to be seamlessly
+integrated into the attribute grammar formalism.  We demonstrate
+strategy attributes in several examples, including optimizing a simple
+expression language, evaluation of the lambda-calculus, regular
+expression matching using Brzozowski derivatives, normalizing
+for-loops in an ableC extensions, and in optimizing the implementation
+of strategy attributes themselves.
