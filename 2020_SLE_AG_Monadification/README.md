@@ -13,5 +13,5 @@ documents:
 
 ## For MELT group developers
 
-Please see the [README.md](2020_SLE_AG_Monadification/scripts/README.md) file
-in the [scripts](2020_SLE_AG_Monadification/scripts/) directory.
+Please see the [README.md](scripts/README.md) file in the
+[scripts](scripts) directory.
