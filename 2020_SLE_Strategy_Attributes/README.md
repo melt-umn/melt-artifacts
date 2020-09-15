@@ -1,18 +1,24 @@
-# Artifact for Strategic Tree Rewriting in Attribute Grammars
+# Strategic Tree Rewriting in Attribute Grammars - software artifact
 
-The container, examples folder and artifact tarball may be built by running the `./build-artifact` script.
-Note that this may need to be run as `sudo ./build-artifact` if your user is not a member of the `docker` group.
+## For artifact evaluators
 
-The saved container extracted from the artifact tarball may be loaded by running
-```
-docker load -i dockerimage.tar
-```
+The evaluate this software artifact, please see the following
+documents:
+1. The [Getting-Started.md](Getting-Started.md) file has instructions on
+   installing and testing the artifact to see that it can be run
+   correctly on evaluators' computers.
+2. The [Step-By-Step-Instructions.md](Step-By-Step-Instructions.md)
+   file has instruction to walk though the examples to carry out the
+   actual evaluation.
 
-The container may be run with the examples folder mounted by running
-```
-docker run -itv $PWD/examples:/root/examples melt-umn/strategy-attributes
-```
+## For MELT group developers
 
-The generated files and image may be removed by running `./clean`.
+Please see the [README.md](scripts/README.md) file in the
+[scripts](scripts) directory.
 
-Step-by-step instructions explaining each of the examples can be found in `INSTRUCTIONS.md`.
+(Lucas, what was here has been moved into the README in the scripts
+directory.  Please remove this comment when you see this and are OK
+with the change.)
+
+
+
