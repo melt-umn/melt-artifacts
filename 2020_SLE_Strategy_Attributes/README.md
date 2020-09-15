@@ -8,4 +8,6 @@ The container may be run with the examples folder mounted by running
 docker run -itv $PWD/examples:/root/examples melt-umn/strategy-attributes
 ```
 
+The generated files and image may be removed by running `./clean`.
+
 Step-by-step instructions explaining each of the examples can be found in `INSTRUCTIONS.md`.
