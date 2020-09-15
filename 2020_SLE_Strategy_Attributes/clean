@@ -2,4 +2,4 @@
 
 rm -rf *~ *.tar *.tar.gz examples/
 
-docker rm melt-umn/strategy-attributes
+docker rmi melt-umn/strategy-attributes
