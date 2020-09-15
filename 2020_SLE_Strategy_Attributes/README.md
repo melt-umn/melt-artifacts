@@ -1,10 +1,10 @@
 # Artifact for Strategic Tree Rewriting in Attribute Grammars
-The container may simply be run as
-```
-docker run -it melt-umn/strategy-attributes
-```
-Alternatively,
+
+The container, examples folder and artifact tarball may be built by running the `./build-artifact` script.
+
+The container may be run with the examples folder mounted by running
 ```
 docker run -itv $PWD/examples:/root/examples melt-umn/strategy-attributes
 ```
-to allow the local examples folder to be accessed from within the container.
+
+Step-by-step instructions explaining each of the examples can be found in `INSTRUCTIONS.md`.

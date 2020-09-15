@@ -23,4 +23,4 @@ docker build -t melt-umn/strategy-attributes . $@
 docker save melt-umn/strategy-attributes -o dockerimage.tar
 
 # Build tar
-tar cvzf artifact.tar.gz dockerimage.tar examples/ README.md
+tar cvzf artifact.tar.gz dockerimage.tar examples/ INSTRUCTIONS.md

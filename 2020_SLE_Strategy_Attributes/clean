@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -rf *~ *.tar *.tar.gz examples/
+
+docker rm melt-umn/strategy-attributes
