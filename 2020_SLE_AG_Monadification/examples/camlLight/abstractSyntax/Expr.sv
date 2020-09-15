@@ -9,7 +9,7 @@ Implicit synthesized attribute type::Maybe<Type>;
 nonterminal Expr with
    pp, type, gamma, subst, subst_out, knownConstructors, knownTypes;
 
-{-
+
 --Implicit Version
 abstract production letExpr
 top::Expr ::= b::Bindings e::Expr
@@ -33,8 +33,8 @@ top::Expr ::= b::Bindings e::Expr
                       then e.type
                       end;
 }
--}
 
+{-
 --Explicit Version
 abstract production letExpr
 top::Expr ::= b::Bindings e::Expr
@@ -64,6 +64,7 @@ top::Expr ::= b::Bindings e::Expr
              | nothing() -> nothing()
              end;
 }
+-}
 
 
 {-To make sure bindings are well-typed, we need a Boolean.-}
@@ -234,7 +235,6 @@ top::Expr ::= c::Expr th::Expr
 }
 
 
-{-
 --Implicit Version
 abstract production ifthenelse
 top::Expr ::= c::Expr th::Expr el::Expr
@@ -263,7 +263,8 @@ top::Expr ::= c::Expr th::Expr el::Expr
                       | boolType() when typeEqual(th.type, el.type, top.subst_out) -> th.type
                       end;
 }
--}
+
+{-
 --Explicit Version
 abstract production ifthenelse
 top::Expr ::= c::Expr th::Expr el::Expr
@@ -302,7 +303,7 @@ top::Expr ::= c::Expr th::Expr el::Expr
              | _, _, _, _ -> nothing()
              end;
 }
-
+-}
 
 abstract production refAssign
 top::Expr ::= loc::Expr value::Expr

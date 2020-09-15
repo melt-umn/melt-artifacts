@@ -32,13 +32,7 @@ let rec find = fun Leaf n -> Nothing
     in find ;;
 
 
-let rec find = fun tr n -> match tr with
-                             Leaf -> Nothing
-                           | Node (key, a, left, right) ->
-                             if key = n
-                             then Just a
-                             else if n < key
-                                  then find left n
-                                  else find right n
-    in find ;;
+type 'a btree2 =
+  Leaf2
+| Node of (int * 'a * 'a btree2 * 'a btree2) ;;
 
