@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Better error handling
+set -euxo pipefail
+
 # Build the artifact
 # Run with --no-cache to force a clean build of the docker image
 

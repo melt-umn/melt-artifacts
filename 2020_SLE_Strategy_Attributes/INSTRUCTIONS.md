@@ -1,11 +1,19 @@
 # Strategy Attributes
 
 ## Setup
+Download the artifact tarball from melt.cs.umn.edu/artifacts/2020_SLE_Strategy_Attributes.tar.gz
+
+Unzip the tarball and run
+```
+docker load -i dockerimage.tar
+```
+to load the container (this may require `sudo`.)
+
 The container may be run as
 ```
 docker run -itv $PWD/examples:/root/examples melt-umn/strategy-attributes
 ```
-from the directory in which the artifact was extracted.
+from the directory in which the artifact was extracted (this may require `sudo`.)
 This will mount the local `examples/` folder in the home directory of the container,
 such that the example files may be viewed and edited with the editor of your choice,
 while any changes made are reflected in the container.

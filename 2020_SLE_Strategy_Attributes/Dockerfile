@@ -13,7 +13,7 @@ ENV PATH=$PATH:/root/bin
 # download silver
 RUN git clone -b ${SILVER_BRANCH} https://github.com/melt-umn/silver.git
 # get the latest jars
-RUN cd silver && ./update && ./deep-rebuild
+RUN cd silver && ./update #&& ./deep-rebuild
 # remove symbolic links if they exist then install silver to bin directory
 RUN rm -f ~/bin/silver ~/bin/silver-custom && cd silver && ./support/bin/install-silver-bin
 # download ableC
@@ -35,9 +35,14 @@ RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/abl
 RUN cd extensions/silver-ableC && ./bootstrap-compile
 #RUN cd extensions/silver-ableC && ./fetch-jars && ./self-compile
 RUN cd extensions/silver-ableC && ./support/bin/install-silver-bin
+# delete generated files to save space
+RUN rm -rf silver/generated/*/
 
 # get the sample projects
 COPY examples/ examples/
+
+# pre-build ableC-halide
+RUN cd examples/ableC-halide && make build
 
 # get a nicer prompt
 RUN echo  'export PS1="\[\e[3;34m\]strategy-attributes:\W |- \[\e[m\]"' >> /root/.bashrc
