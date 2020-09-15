@@ -7,7 +7,7 @@ documents:
 1. The [Getting-Started.md](Getting-Started.md) file has instructions on
    installing and testing the artifact to see that it can be run
    correctly on evaluators' computers.
-2. The [Step-by-Step-Instructions.md](Step-by-Step-Instructions.md)
+2. The [Step-By-Step-Instructions.md](Step-By-Step-Instructions.md)
    file has instruction to walk though the examples to carry out the
    actual evaluation.
 
