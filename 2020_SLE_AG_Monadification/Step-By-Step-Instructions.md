@@ -1,11 +1,8 @@
 
-## Background
+## Monads
 
-
-### Monads
-
-Monads can be used to represent computational effects.  Our examples
-will use two monads, `Maybe` and `Either`.
+Our examples will use two monads implicitly for our monadification,
+`Maybe` and `Either`.
 
 The `Maybe<T>` monad represents potential failure.  It has two
 constructors:
@@ -254,4 +251,238 @@ true && (lambda x:Bool. x)
 
 
 ## Example: CamlLight
+
+In the directory for examples, we have an example named `camlLight`,
+an implementation of type inference for the Caml Light programming
+language.  Enter the directory for this example:
+```
+cd camlLight
+```
+Because this is a much larger language than the previous two examples,
+the abstract syntax is in multiple files in a directory named
+`abstractSyntax`.  We will look at a couple of productions in just one
+of these files.  Please open `abstractSyntax/Expr.sv` in your
+preferred text editor.
+
+In this file, as the name suggests, we are defining type inference for
+expressions in Caml Light.  We have several attributes which occur on
+expressions for typing, the noteworthy ones here being:
+
+- `gamma : Maybe<[Pair<String Type>]>`:  The typing context containing
+  known variable names and their types
+- `subst : Maybe<[Pair<String Type>]>`:  The substitution for type
+  variables as handed down from constructs higher in the abstract
+  syntax tree
+- `subst_out : Maybe<[Pair<String Type>]>`:  The substitution after
+  typing the current expression
+- `type : Maybe<Type>`:  The type of the current expression
+
+We set out with the intention of making only the `type` attribute an
+implicit attribute, to make the possible failure of typing implicit.
+We found, however, that the implicit `Maybe` from this attribute
+spread to other attributes, which `type` relied on and which relied on
+`type`.  These were `gamma`, `subst`, and `subst_out`, so they have an
+implicit `Maybe` on their types as well, to represent the potential
+failure in them which comes from the potential failure to find a type
+for an expression.
+
+We will look at two expression productions using monads implicitly
+and being monadified along with versions of them which use monads
+explicitly.
+
+
+### Let Expression
+
+On line 14 in `abstractSyntax/Expr.sv`, we have a production for
+typing a `let` expression using monads implicitly, which will be
+monadified.  On line 26, this allows us to append the list containing
+the original context (`top.gamma`) to the list containing the bindings
+from the `let`, even though both of these lists are of a `Maybe`
+type.  We are able to ignore the potential failure and write the
+expression assuming success.
+
+Similarly, in the equation for `type` (line 32), we can treat the
+`b.typeOK` attribute as a `Boolean`, even though it is of type
+`Maybe<Boolean>`.
+
+We can compare these to the explicit equation (currently commented out
+with a block comment delimited by `{-` and `-}`) on line 39.  In the
+equation on line 51, the explicit counterpart to line 26, we need to
+unwrap the lists inside the `Maybe` constructors to ensure they are
+successful before appending them to handle the potential failure.
+Similarly, on line 60 we have the counterpart to line 32, which
+unwraps the `Boolean` value inside the potential failure from typing
+the bound expressions.
+
+
+#### Let Examples
+
+We have a file of examples of `let` typing, including both typable and
+untypable expressions.  This file can be run from the `camlLight`
+directory with
+```
+./run sample_programs/let_examples.demo
+```
+This will give the following output:
+```
+Expression:
+   let (x) = 3 and  in (x) + (8)
+Type:
+   int
+
+Expression:
+   let (x) = (3)::((4)::([])) and (y) = 5 and  in (y)::(x)
+Type:
+   (int) list
+
+Expression:
+   let (x) = (3) + (true) and  in x
+Type:
+   Type does not exist
+
+Expression:
+   let ((x : Bool)) = 3 and  in x
+Type:
+   Type does not exist
+``
+The first two `let` expressions are typable, with types `int` and `int
+list`, respectively.  The latter two are not typable because their
+bindings are not typable.
+
+We get the same result if we uncomment the explicit `letExpr`
+production (remove `{-` and `-}` on lines 37 and 67) and comment out
+the implicit `letExpr` production (add `{-` on line 12 and `-}` on
+line 36).  Run
+```
+./silver-compile
+```
+in the `camlLight` directory, then run
+```
+./run sample_programs/let_examples.demo
+```
+The output with the explicit production will be the same as when using
+the implicit version.
+
+
+
+### If-Then-Else Expression
+
+On line 239, we have another production using monads implicitly, this
+time for `if-then-else`, with a commented-out version on line 269.  On
+line 259 we have the implicit equation for `subst_out`.  The
+`typeUnify` function expects two arguments of type `Type` and a third
+argument for a type substitution (`[Pair<String Type>]`).  Because we
+can ignore the `Maybe` on the types, treating them as always
+successful, we can pass them as arguments directly to the unification
+function.
+
+The explicit counterpart is on line 289, where we need to unwrap the
+types and substitution to ensure they are successful before we can
+carry out the unification.
+
+We have another interesting implicit equation, this one for `type`, on
+line 262.  We match on the substituted condition's type (substituted
+so it sees the effects of being unified with the `Boolean` type) to
+check that it is a Boolean type, and check whether the types of the
+two branches are equal under the substitution with which they were
+unified.  We are able to leave out any failure cases and avoid any
+explicit unwrapping due to the monadification procedure.
+
+The counterpart to this equation is on line 295.  Here we must not
+only unwrap the types and substitution from the `Maybe` constructors
+to test if they were successfully constructed, but we must match a
+second time on whether the substituted condition type is a `Boolean`
+type or not.  If it is `Boolean`, we must then test whether the
+branches have the same type.
+
+
+#### If-Then-Else Examples
+
+We have a file of examples of `if-then-else` typing, including both
+typable and untypable expressions.  This file can be run from the
+'camlLight' directory with
+```
+./run sample_programs/if_examples.demo
+```
+This will give the following output:
+```
+Expression:
+   if true then (3) else 4
+Type:
+   int
+
+Expression:
+   if ((3) > (4)) or ((5.0) <=. (6.0)) then ([]) else [3.0; ]
+Type:
+   (float) list
+
+Expression:
+   if (3.0) +. (4.0) then ("Yes") else "No"
+Type:
+   Type does not exist
+
+Expression:
+   if false then ("Yes") else 5
+Type:
+   Type does not exist
+
+Expression:
+   if (3.0) + (true) then ("Yes") else "No"
+Type:
+   Type does not exist
+```
+The first two expressions are typable, typing to `int` and `float
+list`.  The latter three expressions are untypable, one for a
+condition that isn't a `Boolean`, one for different types in the
+branches, and one for an untypable condition.
+
+We get the same result if we uncomment the explicit `ifthenelse`
+production and comment out the implicit `ifthenelse` production.  Run
+```
+./silver-compile
+```
+in the `camlLight` directory, then run
+```
+./run sample_programs/let_examples.demo
+```
+The output with the explicit production will be the same as when using
+the implicit version.
+
+
+
+### Other Examples
+
+We have an example in `sample_programs/btree.demo` defining a type for
+binary trees and defining functions over it.  This can be run with
+```
+./run sample_programs/btree.demo
+```
+resulting in the following output:
+```
+Type Def:
+btree : Inductive type with 1 parametetrs; 
+
+Expression:
+   let rec (insert) = [...] in insert
+Type:
+   (('a) btree) -> (int) -> ('a) -> ('a) btree
+
+Type Def:
+Maybe : Inductive type with 1 parametetrs; 
+
+Expression:
+   let rec (find) = [...] in find
+Type:
+   (('a) btree) -> (int) -> ('a) Maybe
+
+Type Def:
+Error in defining types [btree2]
+```
+This shows that the `btree` and `Maybe' types were successfully
+defined and the two functions were typable, but the type `btree2`
+could not be defined.  This is because, as we can see by examining the
+file, it attempts to define a constructor named `Node`, which is
+invalid because a constructor named `Node` already exists as part of
+`btree`.
+
 

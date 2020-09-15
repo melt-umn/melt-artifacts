@@ -4,20 +4,20 @@ JARFILE=calculator.jar
 
 
 if [ ! -f $JARFILE ]; then
-    echo -e "\e[1;31mFile $JARFILE not found; building it\e[m"
+    echo -e "***** mFile $JARFILE not found; building it *****"
     if ! ./silver-compile; then #exit on Silver compiler error
         exit 1
     fi
     echo ""
 fi
 
-echo -e -n "\e[4;32mEnter an expression:\e[m  "
+echo -e -n "Enter an expression:  "
 read entered
 
 while [ -n "$entered" ]; do
     java -jar $JARFILE "$entered"
     echo ""
-    echo -e -n "\e[4;32mEnter an expression:\e[m  "
+    echo -e -n "Enter an expression:  "
     read entered
 done
 

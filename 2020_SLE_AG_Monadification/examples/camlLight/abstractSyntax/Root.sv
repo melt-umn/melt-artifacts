@@ -159,9 +159,7 @@ top::TopLevel ::= e::Expr rest::TopLevel
   top.output = "Expression:\n   " ++ e.pp ++ "\n" ++
                "Type:\n   " ++ case e.type, e.subst_out of
                                | just(ty), just(subs) -> typePrettify(typeSubst(ty, subs)).pp
-                               | just(ty), nothing() -> "Type exists, but substitution doesn't"
-                               | nothing(), just(subs) -> "Substitution exists, but type doesn't"
-                               | nothing(), nothing() -> "Neither type nor substitution exist"
+                               | _, _ -> "Type does not exist"
                                end ++ "\n\n" ++
                rest.output;
 }
