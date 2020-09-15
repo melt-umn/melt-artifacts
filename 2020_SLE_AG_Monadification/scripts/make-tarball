@@ -4,7 +4,7 @@ DOCKER_NAME=melt-umn/implicit-monads
 DOCKER_IMAGE_NAME=melt-umn-implicit-monads.docker
 DOCKERFILE_DIRECTORY=./Artifact-Docker
 
-TARBALL_NAME="../monadification.tar.gz"
+TARBALL_NAME="2020_SLE_AG_Monadification.tar.gz"
 CONTENTS_LIST="../examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md ../Authors.txt ../Abstract.txt ../preliminary-paper.pdf"
 
 
@@ -48,17 +48,17 @@ fi
 
 #Building the Docker image and save it as appropriate
 if [ $do_clean = true ]; then
-    echo -e "\e[1;32mClean building Docker image $DOCKER_NAME\e[m"
+    echo "***** Clean building Docker image $DOCKER_NAME *****"
     build_docker_image_clean
     echo ""
-    echo -e "\e[1;32mSaving Docker image to $DOCKER_IMAGE_NAME\e[m"
+    echo "***** Saving Docker image to $DOCKER_IMAGE_NAME *****"
     save_docker_image
     echo ""
 else if [ ! $docker_image_exists = true ]; then
-         echo -e "\e[1;32mBuilding Docker image $DOCKER_NAME\e[m"
+         echo "***** Building Docker image $DOCKER_NAME *****"
          build_docker_image
          echo ""
-         echo -e "\e[1;32mSaved Docker image $DOCKER_IMAGE_NAME does not exist; saving Docker image\e[m"
+         echo "***** Saving Docker image because saved Docker image $DOCKER_IMAGE_NAME does not exist. *****"
          save_docker_image
          echo ""
      fi
@@ -66,7 +66,7 @@ fi
 
 
 #Build the tarball
-echo -e "\e[1;32mBuilding archive $TARBALL_NAME\e[m"
+echo "***** Building archive $TARBALL_NAME *****"
 tar -c -f $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
 
 

@@ -19,8 +19,7 @@ RUN rm -f ~/bin/silver ~/bin/silver-custom && cd silver && ./support/bin/install
 # add home bin directory to the path
 ENV PATH=$PATH:/root/bin
 # get a nicer prompt
-#RUN echo  'export PS1="\e[34m\]implicit-monads:\W |- \[\e[m\]"' >> /root/.bashrc
-RUN echo  'export PS1="\[\e[3;34m\]implicit-monads:\W |- \[\e[m\]"' >> /root/.bashrc
+RUN echo  'export PS1="implicit-monads:\W > "' >> /root/.bashrc
 
 ENTRYPOINT /bin/bash
 
