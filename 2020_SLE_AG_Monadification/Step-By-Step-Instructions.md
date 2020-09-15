@@ -1,4 +1,17 @@
 
+## Attribute Grammars
+
+Attribute grammars describe the semantics of languages by associating
+semantic attributes with nodes in an abstract syntax tree.  The values
+of these attributes are given by equations associated with grammatical
+productions.  For example, in typing the simply-typed lambda calculus,
+we would have attributes for the typing context and the type of an
+expression.
+
+
+
+
+
 ## Monads
 
 Our examples will use two monads implicitly for our monadification,
@@ -28,6 +41,27 @@ Either<Int T> would contain an error code.
 
 
 
+## Monadification
+
+Our monadification is a rewriting which allows us to use monads
+implicitly in attribute equations.  Implicit use of a monad means that
+we are ignoring the presence of the monad.  This allows us to act as
+if attributes of a monadic type `M<T>` actually have type `T`.  We can
+use them where an expression of type `T` is expected and we can use
+expressions of type `T` in equations defining them.
+
+Monadification also allows us to write only the success cases.  For
+example, if we are typing a language including an `if-then-else`
+construct, we would be able to write the equation for the `type`
+attribute such that it only gives a type to the construct when the
+condition has a `Boolean` type and the two branches have the same
+type, rather than writing the equation to explicitly fill in the error
+cases as well.
+
+
+
+
+
 ## Example:  Calculator
 
 In the directory for examples, we have an example named `calculator`.
@@ -36,26 +70,55 @@ Enter the directory for this example:
 cd calculator
 ```
 This example implements a simple calculator with addition,
-subtraction, multiplication, and division.  Please open the
-`Abstract.sv` file in your preferred editor.
+subtraction, multiplication, and division.  The grammar can be
+compiled with
+```
+./silver-compile
+```
+Examples can be run with
+```
+./run
+```
+This will bring up a REPL for the calculator.  Entering an expression
+will evaluate it and print out the result.  For example:
+```
+Enter an expression:  3 + 4
+Expression:  (3.0) + (4.0)
+Value:  7.0
+Implicit Value:  7.0
+```
+If an expression is entered which cannot evaluate, we get that there
+is no value:
+```
+Enter an expression:  3 / 0
+Expression:  (3.0) / (0.0)
+Value:  no value
+Implicit Value:  no value
+```
+To exit the loop, enter a blank line.
 
-In our calculator, we have three attributes, `pp`, `imp_value`, and
-`value`.  The `pp` attribute simply builds a string showing the
-current expression.  The interesting attributes are `imp_value` and
-`value`, both of which have the type `Maybe<Float>` to represent
-potential failure.  These both compute the value of the expression,
-but `imp_value` is an implicit attribute, which uses implicit
-equations, and `value` uses standard equations.
+In our calculator, we have two attributes for evaluation, `imp_value`
+and `value`.  Both of which have the type `Maybe<Float>` to represent
+potential failure due to division by zero.  In the output from the
+calculator, a result of `just(x)` outputs the number `x` and a result
+of `nothing()` outputs the response `no value`.  Both attributes
+compute the value of the expression, as can be seen in the output from
+the calculator, but `imp_value` is an implicit attribute, which uses
+monads implicitly, and `value` uses standard equations.
+
+Please open the `Abstract.sv` file in your preferred editor to view
+the equations in this grammar.
 
 The simplest example of the benefits of monadification can be seen in
 the `num` production on line 32, where the value from evaluation is
-simply the number.  On line 37, we have the implicit
-equation for `top.imp_value`, and on line 39, we have the equation for
-`top.value`.  On line 39, we give the value `just(n)` because we need
-the expression to have type `Maybe<Float>`.  On line 37, in the
-implicit equation, we can simply have the expression `n`, ignoring the
-`Maybe` monad representing potential failure since there is no
-potential failure here.
+simply the number, as expected when not thinking about the monad
+`Maybe`.  On line 37, we have the implicit equation for
+`top.imp_value`, and on line 39, we have the equation for `top.value`.
+On line 39, we give the value `just(n)` because we need the expression
+to have type `Maybe<Float>`.  On line 37, in the implicit equation, we
+can simply have the expression `n`, ignoring the `Maybe` monad
+representing potential failure since there is no possibility of
+failure here.
 
 To see more complex uses, let's examine the equations for `imp_value`
 and `value` in the `plus` production on line 42.  The equation for
@@ -64,53 +127,38 @@ evaluated to values or not (`t1.value` and `t2.value` are `just`s),
 then add the values if they were values or give a failure (give a
 `nothing`).  The implicit equation for `top.imp_value` on line 47
 simply adds together the `imp_value` attributes of the addends, making
-the intention of the equation clearer.  These two equations will end
-up evaluating the same way, but the implicit one is easier to write
-and easier to read.
+the intention of the equation clearer.  This is an example of using
+the `Maybe` monad implicitly, where we use expressions of type
+`Maybe<Float>` as if they had type `Float`.  These two equations will
+end up evaluating the same way, but the implicit one is easier to
+write and easier to read.
 
 The `minus` and `mult` productions are similar to the `plus`
-production.  The `div` production (line 81) has equations which show
-more benefits of monadification.  Division should successfully
+production.  The `div` production (line 81) has an equation which
+shows more benefits of monadification.  Division should successfully
 evaluate only if the divisor is non-zero.  On line 86, in the implicit
 equation for `top.imp_value` we check if the divisor's value
 (`t2.imp_value`) is non-zero and then carry out the division.  We
 don't need to write out the error cases in impliict equations, since
 the monadification will fill them in.  The equation for `top.value` on
 line 89 needs to unwrap the values as in the `plus` production, but it
-then also needs to check that the divisor is non-zero, including the
-monadic failure `nothing()` for when the divisor is zero.
+then also needs to check that the divisor is non-zero, giving the
+monadic failure `nothing()` for when the divisor is zero.  We can see
+this in the `3 / 0` example above, where we get the result of `no
+value`.
 
-To try using the calculator, run
+The monadic equations for `imp_value` will pass through any failures,
+just as the standard equations for `value` will pass them through.  We
+can see this by trying the following examples:
 ```
-./silver-compile
-```
-to compile this example, then run
-```
-./run
-```
-to get a REPL for the calculator.  When you give it an example, enter
-the expression you want to evaluate.  For example, entering `3 + 4`
-will give you the following:
-```
-Enter an expression:  3 + 4
-Expression:  (3.0) + (4.0)
-Value:  7.0
-Implicit Value:  7.0
-```
-This prints out the expression entered using the `pp` attribute, then
-prints out the values of the `value` and `imp_value` attributes.  If
-the value is `just(x)`, it will output `x`; if the value is
-`nothing()`, it will output `no value`.  Some possible examples to
-try:
-```
-3 + 8 - 24
-3 / 0
 (4 / 0) + 3
+3.0 + 4.3 - 8.8 * 5 / (3 - 4 + 1)
 ```
-We can see that the `imp_value` and `value` attributes will both
-always have the same value, but, as we saw in the source code, the
-implicit equations for `imp_value` are much simpler to read and write
-than the standard equations for `value`.
+We can also see that these two attributes are evaluating the same
+basic arithmetic operations and thus will always have the same numeric
+value; however, as we saw in the source code, the implicit equations
+for `imp_value` are much simpler to read and write than the standard
+equations used for `value`.
 
 
 
@@ -118,8 +166,9 @@ than the standard equations for `value`.
 
 ## Example:  Simply-Typed Lambda Calculus with Booleans
 
-In the directory for examples, we have an example named `stlc`.  Enter
-the directory for this example:
+In the directory for examples (`examples/` in the directory where the
+archive was inflated), we have an example named `stlc`.  Enter the
+directory for this example:
 ```
 cd stlc
 ```
@@ -133,10 +182,20 @@ and can be run on examples with the `run` script:
 ```
 ./run
 ```
-This will give a prompt, `Enter an expression:`.  The following
-example expressions show the syntax of the language:
+This will give a prompt, `Enter an expression:`.  Entering an
+expression will output the type of the expression and any type errors,
+along with the evaluation steps when evaluating the expression:
 ```
-lambda x:Bool. x
+Enter an expression:  lambda x:Bool. x
+Expression:  lambda x:Bool. x
+Type:        (Bool) -> Bool
+Errors:      
+SingleSteps Attribute (Evaluation Trace):
+   [,  lambda x:Bool. x]
+```
+The following example expressions show the syntax of the language:
+```
+lambda x:Bool -> Bool. x
 true && false
 true || true
 (lambda x:Bool. x) true
@@ -152,28 +211,42 @@ We have three attributes associated with typing, `gamma`, which
 represents the typing context; `typ`, which represents the type of an
 expression; and `errors`, a list of type errors.
 
-The `typ` attribute is an implicit attribute, meaning its equations
-may take advantage of our monadification process to use monads
+The `typ` attribute is an implicit attribute, so its equations
+may take advantage of our monadification process and use monads
 implicitly.  As in the `calculator` example above, this means we can
 use values without unwrapping them, as we see in the equation for
 `typ` in the `abs` production on line 87.  Here `body.typ` is used
-implicitly to build the function type for the abstraction.
+implicitly to build the function type for the abstraction.  For
+example, if we run the expression (`./run` and enter it at the prompt)
+```
+lambda x : Bool -> Bool. x && true
+```
+we do not get an actual type, but rather a type error because the body
+of the function is untypable.  This error was passed through the `abs`
+production in the `typ` equation without our needing to explicitly
+write the passing through.
 
-The type of this attribute is `Either<String Type>`, which allows us
-to give an error message in the case an expression is not typable.
-For example, in the `app` production, the equation for `typ` (line
-112) checks that the prospective function has a function type and that
-the argument's type matches the expected argument type.  If one of
-these is not true, we give an appropriate error message in the monadic
+We get a type error as the type for untypable expressions because the
+type of this attribute is `Either<String Type>`, which allows us to
+give an error message in the case an expression is not typable.  For
+example, in the `app` production, the equation for `typ` (line 112)
+checks that the prospective function has a function type and that the
+argument's type matches the expected argument type.  If one of these
+is not true, we give an appropriate error message in the monadic
 failure constructor for `Either`, `left`.  For example, if the
 argument types do not match, we give `left("Application type
-mismatch")`.
+mismatch")`.  This can be seen in trying to type
+```
+(lambda x:Bool. x) (lambda x:Bool. x)
+```
 
 By using `Either` implicitly, the errors from the subexpressions are
-passed up the abstract syntax tree automatically.  For example, in the
-equation for `typ` (line 87) in the `abs` production, if `body.typ`
-has the value `left(s)` for some error message `s`, the value of
-`top.typ` will also be `left(s)`.
+passed up the abstract syntax tree automatically.  Thus we get the
+error from the body of the applied function when we try to type the
+following expression (using the function from above):
+```
+(lambda x : Bool -> Bool. x && true) (lambda x:Bool. x)
+```
 
 We can use the error messages we generate in the `typ` attribute to
 produce a list of type errors in the unrestricted `errors` attribute.
@@ -188,12 +261,12 @@ passed up from the subexpressions.
 In implicit equations, we are not able to do case analysis on the
 constructors of the monad of the attribute being defined.  For
 example, the `typ` attribute cannot match on the `left` and `right`
-constructors because `Either` is the `typ` attribute uses the `Either`
+constructors because `Either` in the `typ` attribute uses the `Either`
 monad.  We are able to match on them in equations for the `errors`
 attribute because it is an unrestricted attribute.  In equations for
-`typ`, however, we can match on any other type, even if that type is a
-different monad.  In the `var` production, the equation for `typ`
-(line 62) uses a function `lookupType`, returning a value of type
+`typ`, however, we can match on any other type, even if that type is
+also a monad.  In the `var` production, the equation for `typ` (line
+62) uses a function `lookupType`, returning a value of type
 `Maybe<Type>` to find the type of an attribute if it is a known
 variable.  We match on the `just` and `nothing` constructors to turn
 this `Maybe` into an `Either`.
@@ -216,35 +289,6 @@ produce a monadic failure (i.e. `nothing`) for the attribute value
 instead.  Not requiring an expression to be written here fits in with
 not requiring failure cases to be written, as we saw with the
 `calculator` grammar above.
-
-
-### Examples
-
-When running an example, with the provided `run` script, we get
-something like the following:
-```
-Enter an expression:  (lambda x:Bool. x) true
-Expression:  (lambda x:Bool. x) (true)
-Type:        Bool
-Errors:      
-SingleSteps Attribute (Evaluation Trace):
-   [,  (lambda x:Bool.x) (true),  true]
-```
-As with the `calculator` grammar, we print out the original
-expression; this shows how the entered text was parsed.  The `Type`
-line outputs the type of the expression or a type error message.  The
-`Errors` line outputs a list of the type errors in the expression,
-which may contain more than the single error from the `Type` line.
-The final component is the sequence of evaluation steps, either
-resulting in a value or an expression which can evaluate no further.
-
-Some possible examples to try:
-```
-(lambda x:Bool. x) true
-true && (lambda x:Bool. x)
-(lambda x:Bool. x) && true
-(lambda x:Bool. lambda y:Bool. x && y) (true || false) (false && true)
-```
 
 
 
