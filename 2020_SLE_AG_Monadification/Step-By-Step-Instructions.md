@@ -388,7 +388,7 @@ Expression:
    let ((x : Bool)) = 3 and  in x
 Type:
    Type does not exist
-``
+```
 The first two `let` expressions are typable, with types `int` and `int
 list`, respectively.  The latter two are not typable because their
 bindings are not typable.
@@ -522,7 +522,7 @@ Type:
 Type Def:
 Error in defining types [btree2]
 ```
-This shows that the `btree` and `Maybe' types were successfully
+This shows that the `btree` and `Maybe` types were successfully
 defined and the two functions were typable, but the type `btree2`
 could not be defined.  This is because, as we can see by examining the
 file, it attempts to define a constructor named `Node`, which is
