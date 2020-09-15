@@ -1,4 +1,4 @@
-# Strategic Tree Rewriting in Attribute Grammars - software artifact
+# Monadification of Attribute Grammars - software artifact
 
 ## For artifact evaluators
 
@@ -15,10 +15,3 @@ documents:
 
 Please see the [README.md](scripts/README.md) file in the
 [scripts](scripts) directory.
-
-(Lucas, what was here has been moved into the README in the scripts
-directory.  Please remove this comment when you see this and are OK
-with the change.)
-
-
-
