@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Build the artifact
+# Run with --no-cache to force a clean build of the docker image
+
+# Create examples folder
+rm -rf examples/*
+mkdir -p examples
+
+# Clone examples
+# TODO: Change branch once actual releases are finished
+cd examples
+git clone -b develop https://github.com/melt-umn/ableC-halide.git
+git clone -b develop https://github.com/melt-umn/rewriting-optimization-demo.git
+git clone -b develop https://github.com/melt-umn/rewriting-lambda-calculus.git
+git clone -b develop https://github.com/melt-umn/rewriting-regex-matching.git
+cd ..
+
+# Build docker image
+docker build -t melt-umn/strategy-attributes . $@
+
+# Save docker image
+docker save melt-umn/strategy-attributes -o dockerimage.tar
+
+# Build tar
+tar cvzf artifact.tar.gz dockerimage.tar examples/ README.md
