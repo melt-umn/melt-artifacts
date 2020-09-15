@@ -5,7 +5,7 @@ DOCKER_IMAGE_NAME=melt-umn-implicit-monads.docker
 DOCKERFILE_DIRECTORY=./Artifact-Docker
 
 TARBALL_NAME="2020_SLE_AG_Monadification.tar.gz"
-CONTENTS_LIST="../examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md ../Abstract.txt ../preliminary-paper.pdf"
+CONTENTS_LIST="../examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md ../Abstract.txt ../monadification_of_AGs.pdf"
 
 
 
