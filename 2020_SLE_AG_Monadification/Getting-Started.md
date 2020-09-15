@@ -1,6 +1,9 @@
-
 ## Getting Started Guide
 
+The instructions below will show evaluators how to "kick the tires" of
+the artifact to demonstrate that it works.  The The
+[Step-By-Step-Instructions.md](Step-By-Step-Instructions.md) describe
+the steps to take to carry out the actual evaluation.
 
 ### Obtaining the Archive
 
