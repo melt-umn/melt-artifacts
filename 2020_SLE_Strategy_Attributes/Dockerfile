@@ -13,7 +13,7 @@ ENV PATH=$PATH:/root/bin
 # download silver
 RUN git clone -b ${SILVER_BRANCH} https://github.com/melt-umn/silver.git
 # get the latest jars
-RUN cd silver && ./update # && ./deep-rebuild
+RUN cd silver && ./update && ./deep-rebuild
 # remove symbolic links if they exist then install silver to bin directory
 RUN rm -f ~/bin/silver ~/bin/silver-custom && cd silver && ./support/bin/install-silver-bin
 # download ableC
@@ -32,8 +32,8 @@ RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/abl
 RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/ableC-unification.git
 RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/ableC-halide.git
 # setup silver-ableC
-#RUN cd extensions/silver-ableC && ./bootstrap-compile
-RUN cd extensions/silver-ableC && ./fetch-jars # && ./self-compile
+RUN cd extensions/silver-ableC && ./bootstrap-compile
+#RUN cd extensions/silver-ableC && ./fetch-jars && ./self-compile
 RUN cd extensions/silver-ableC && ./support/bin/install-silver-bin
 
 # get the sample projects
