@@ -1,0 +1,73 @@
+#!/bin/bash
+
+DOCKER_NAME=melt-umn/implicit-monads
+DOCKER_IMAGE_NAME=melt-umn-implicit-monads.docker
+DOCKERFILE_DIRECTORY=./Artifact-Docker
+
+TARBALL_NAME="../monadification.tar.gz"
+CONTENTS_LIST="../examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md ../Authors.txt ../Abstract.txt ../preliminary-paper.pdf"
+
+
+
+build_docker_image_clean () {
+    docker build -t $DOCKER_NAME $DOCKERFILE_DIRECTORY --no-cache
+}
+
+
+build_docker_image () {
+    docker build -t $DOCKER_NAME $DOCKERFILE_DIRECTORY
+}
+
+
+save_docker_image () {
+    docker save $DOCKER_NAME -o $DOCKER_IMAGE_NAME
+}
+
+
+
+#Parse options
+do_clean=false
+
+while [ ! -z $1 ]; do
+    case $1 in
+        "--clean" ) do_clean=true ;; #rebuild everything completely
+        x ) echo "Unknown option $x" ;;
+    esac
+    shift 1
+done
+
+
+
+#Check whether saved Docker image (the version that can be put directly in the tarball) exists
+if [ -f $DOCKER_IMAGE_NAME ]; then
+    docker_image_exists=true
+else
+    docker_image_exists=false
+fi
+
+
+#Building the Docker image and save it as appropriate
+if [ $do_clean = true ]; then
+    echo -e "\e[1;32mClean building Docker image $DOCKER_NAME\e[m"
+    build_docker_image_clean
+    echo ""
+    echo -e "\e[1;32mSaving Docker image to $DOCKER_IMAGE_NAME\e[m"
+    save_docker_image
+    echo ""
+else if [ ! $docker_image_exists = true ]; then
+         echo -e "\e[1;32mBuilding Docker image $DOCKER_NAME\e[m"
+         build_docker_image
+         echo ""
+         echo -e "\e[1;32mSaved Docker image $DOCKER_IMAGE_NAME does not exist; saving Docker image\e[m"
+         save_docker_image
+         echo ""
+     fi
+fi
+
+
+#Build the tarball
+echo -e "\e[1;32mBuilding archive $TARBALL_NAME\e[m"
+tar -c -f $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
+
+
+

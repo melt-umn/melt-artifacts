@@ -1,6 +1,0 @@
-
-#How I created the docker image (from artifact directory):
-sudo docker build -t melt-umn/implicit-monads ./Artifact-Docker $@
-
-#To do a clean rebuild (e.g. the Silver branch changed), use the
-#   --no-cache option

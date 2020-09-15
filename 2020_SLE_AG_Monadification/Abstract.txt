@@ -1,0 +1,8 @@
+
+This artifact demonstrates the use of monadification in attribute
+grammars, allowing us to use monads implicitly.  It shows how our
+monadification scheme simplifies attribute equations, making them
+clearer, while maintaining the same behavior.  It does this by giving
+examples of attribute equations with and without using monads
+implicitly, and showing that both versions evaluate the same, while
+the equations using monads implicitly are much clearer.

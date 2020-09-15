@@ -221,7 +221,7 @@ not requiring failure cases to be written, as we saw with the
 `calculator` grammar above.
 
 
-## Examples
+### Examples
 
 When running an example, with the provided `run` script, we get
 something like the following:
