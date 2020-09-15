@@ -6,7 +6,7 @@
 
 The archive containing the Docker image and associated files can be
 obtained from
-[melt.cs.umn.edu/melt-artifacts/](melt.cs.umn.edu/melt-artifacts/).
+[melt.cs.umn.edu/melt-artifacts/](http://melt.cs.umn.edu/melt-artifacts/).
 The correct archive is
 ```
 2020_SLE_AG_Monadification.tar.gz
