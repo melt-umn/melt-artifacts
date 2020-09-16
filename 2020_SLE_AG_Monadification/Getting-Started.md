@@ -32,8 +32,10 @@ paragraph) without doing this step again.
 
 
 Once the image has been loaded, you can enter the Docker image with
+the following command, replacing `{{PATH/TO/examples/}}` with the
+absolute path to the `examples` directory from the archive:
 ```
-docker run -i -t -v $PWD/examples/:/root/examples/ melt-umn/implicit-monads
+docker run -i -t -v {{PATH/TO/examples/}}:/root/examples/ melt-umn/implicit-monads
 ```
 This command may also require superuser privileges.  This will bring
 you to a shell in the Docker image, with the prompt
