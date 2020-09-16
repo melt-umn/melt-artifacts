@@ -18,12 +18,12 @@ replaced with the final version of the paper when it is complete.
 Please note that the artifact download site is a temporary one.  Once
 we have taken any feedback from the evaluators into account a final
 version will be prepared and place in the Data Repository for the
-University of Minnesota: https://conservancy.umn.edu/.  The data and
+University of Minnesota: [https://conservancy.umn.edu/](https://conservancy.umn.edu/).  The data and
 other artifacts placed here are archived by the University of
 Minnesota libraries in perpetuity and are assigned digital object
 identifier numbers (DOIs).  A previous software artifact for a paper
 at OOPSLA is archived there now, with the DOI/url of
-https://doi.org/10.13020/D6VQ25.  We will follow the same process for
+[https://doi.org/10.13020/D6VQ25](https://doi.org/10.13020/D6VQ25).  We will follow the same process for
 this artifact.  The DOI for it will be included in the final version
 of our paper. If the evaluators would like to see this done sooner so
 that the "artifact available" badge can be assigned we would be happy
