@@ -64,7 +64,7 @@ All of the examples may be easily be run at once by executing
 ## Lambda calculus example
 This example is an implementation of the untyped lambda-calculus, as seen in Appendix B.1 of the paper. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
-cd ~/examples/rewriting-optimization-demo/
+cd ~/examples/rewriting-lambda-calculus/
 ```
 
 The directory structure is similar to the previous example.  The strategy attributes for normalization to head-normal form are defined in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalStrategyAttr.sv` (a prior implementation of the same rewrite rules using a reflection-based mechanism for rewriting undecorated terms in Silver is given in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalTermRewrite.sv`.)
@@ -97,7 +97,69 @@ The default definition of the `eval` strategy on line 55 of `grammars/edu.umn.cs
 
 
 ## Regex matching with Brzozowski derivatives
-*write this*
+This example demonstrates an implementation of regex matching using Brzozoski derivatives, as seen in Appendix B.2 of the paper.  Change into the `examples/rewriting-regex-matching/` directory:
+```
+cd ~/examples/rewriting-regex-matching/
+```
+
+The directory structure is similar to the previous examples.  The abstract syntax of regular expressions, and attributes for matching and simplification, are defined in `grammars/edu.umn.cs.melt.rewritingRegexMatching/abstractsyntax/AbstractSyntax.sv`.  Here the function `matches` (line 83) drives the matching process, by repeatedly computing the Brzozowski derivative of the regex with respect to each character of the string (implemented by the `deriv` and `wrt` attributes) and simplifying the resulting regular expression.  The original regex matches the string if and only if the final regex is nullable (implemented by the `nullable` attribute.)
+
+Two implementations of regex simplification are included: one using an earlier reflection-based rewriting library/extension to Silver, and one using strategy attributes (`simpl` and `simplDeriv`.)
+
+To compile the Silver specification, run
+```
+./build
+```
+This may take a few seconds, and should produce an executable jar file named `regex.jar`.
+
+The compiled program may be run with two command line arguments, a regex and a string to match, such as
+```
+java -jar regex.jar '(ab)*' ababab
+```
+The program will either print `Match success` or `Match failure`.
+
+If a second argument is not provided the string to match will be read from stdin.  Two large randomly-generated alphanumeric files are provided as examples.  Note that on large input files additional stack and heap space must be specified as command-line arguments to Java; for example to search for the string `1q3mNBHB1zM` in `test2.txt` one might run
+```
+java -Xss500M -Xmx2G -jar regex.jar '.*1q3mNBHB1zM.*' < test2.txt
+```
+
+A test script is also provided containing a number of additional test cases as examples.  These may be tested by running
+```
+./run-tests
+```
+
 
 ## Loop normalization in the ableC-Halide extension
-*write this*
+The ableC-Halide extension is a sophisticated extension to ableC for specifying optimizing transformations on nested $for$-loops, inspired by the Halide C++ embedded domain-specific language.  Before loops can be transformed they must have the correct form; this normalization process is accomplished by strategy attributes.
+
+Change into the `examples/ableC-halide/` directory:
+```
+cd ~/examples/ableC-halide/
+```
+
+The extension directory contains several subdirectories.  The specification of the extension is defined in the `grammars/` folder; the use of strategy attribute for normalization occurs in `grammars/edu.umn.cs.melt.exts.ableC.halide/abstractsyntax/IterStmt.sv`.  A number of example programs using the extension are provided in the `examples/` folder, the `tests/` folder contains more tests programs (including some with semantic errors), and the `modular_analyses/` folder contains specifications of analyses to ensure that composing with independent extensions will not introduce parser table conflicts or missing equations.  All of the examples and test cases may be built and run by running `make -j` at the top level, however this will take several minutes and is not required to run the examples.
+
+Change into the `examples/` directory:
+```
+cd ~/examples/
+```
+
+A nontrivial example use of the extension is in `matmul.xc`.  This program provides two implementations of a matrix multiplication, one unoptimized and the other with a number of optimizing transformations applied.  This may be built and run by typing
+```
+make matmul.out
+./matmul.out
+```
+The `make` command will automatically perform a number of steps to compile the program:
+1. Invoke `silver` to compile the Silver specification into a jar file `ableC.jar`
+2. Run `java -jar ableC.jar matmul.xc` to translate the extended C program `matmul.xc` into an unextended C program `matmul.c`
+3. Run `cc -fopenmp -g   -c -o matmul.o matmul.c` to compile `matmul.c` into an object file `matmul.o` (the `-fopenmp` flag enables the use of OpenMP pragmas, used by the extension to implement parallelism)
+4. Run `cc  matmul.o  -lgomp -o matmul.out` to link `matmul.o` into an executable binary `matmul.out`
+When the program is run it will build a pair of large random matrices filled with random values, multiply them using both the optimized and unoptimized implementations while printing the total runtime for each, and compare the results for correctness.
+
+In the `matmul.xc` program all for-loops were defined using an additional `forall` statement provided by the extension, which forwards (translates) to a set of already-normal `for`-loops that start at 0 and use the `<` and `++` operators in their condition and update expressions.  However, consider `irregular.xc`; this program defines and transforms several loops that do not fit this pattern.  Here the strategy attributes come in to play, initially simplifying and normalizing the loop expressions into a form that can be transformed.  To run compile and run this example type
+```
+make irregular.out
+./irregular.out
+```
+
+You may also try editing `irregular.out` to change the loop expressions within the `transform {}` block, to see how effective the strategies are in normalizing complex loop conditions.
