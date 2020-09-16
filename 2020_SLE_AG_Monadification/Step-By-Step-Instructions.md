@@ -177,7 +177,7 @@ shows more benefits of monadification.  Division should successfully
 evaluate only if the divisor is non-zero.  On line 86, in the implicit
 equation for `top.imp_value` we check if the divisor's value
 (`t2.imp_value`) is non-zero and then carry out the division.  We
-don't need to write out the error cases in impliict equations, since
+don't need to write out the error cases in implicit equations, since
 the monadification will fill them in.  The equation for `top.value` on
 line 89 needs to unwrap the values as in the `plus` production, but it
 then also needs to check that the divisor is non-zero, giving the
@@ -344,7 +344,7 @@ not requiring failure cases to be written, as we saw with the
 
 
 
-## Example: CamlLight
+## Example: Caml Light
 
 In the directory for examples, we have an example named `camlLight`,
 an implementation of type inference for the [Caml Light programming

@@ -21,7 +21,7 @@ Download this archive and inflate it.
 ## Setting Up Docker
 
 The Docker image needs to be loaded so Docker can find it.  To do
-this, run the follwing command in the directory containing the
+this, run the following command in the directory containing the
 contents of the archive:
 ```
 docker load -i melt-umn-implicit-monads.docker
