@@ -2,8 +2,7 @@
 
 ## For artifact evaluators
 
-The evaluate this software artifact, please see the following
-documents:
+To evaluate this software artifact, please see the following documents:
 1. The [Getting-Started.md](Getting-Started.md) file has instructions on
    installing and testing the artifact to see that it can be run
    correctly on evaluators' computers.
@@ -15,10 +14,4 @@ documents:
 
 Please see the [README.md](scripts/README.md) file in the
 [scripts](scripts) directory.
-
-(Lucas, what was here has been moved into the README in the scripts
-directory.  Please remove this comment when you see this and are OK
-with the change.)
-
-
 

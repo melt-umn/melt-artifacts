@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# Build the artifact
+# Run with --no-cache to force a clean build of the docker image
+
 # Better error handling
 set -euxo pipefail
 
-# Build the artifact
-# Run with --no-cache to force a clean build of the docker image
+DOCKER_IMAGE_NAME=melt-umn-strategy-attributes.docker
+CONTENTS_LIST="examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md" # ../Authors.txt ../Abstract.txt ../preliminary-paper.pdf
 
 echo "Deleting old examples..."
 rm -rf examples/*
@@ -17,13 +20,16 @@ git clone -b develop https://github.com/melt-umn/ableC-halide.git
 git clone -b develop https://github.com/melt-umn/rewriting-optimization-demo.git
 git clone -b develop https://github.com/melt-umn/rewriting-lambda-calculus.git
 git clone -b develop https://github.com/melt-umn/rewriting-regex-matching.git
+
+echo "Deleting unneeded files..."
+rm -rf */.git */Jenkinsfile
 cd ..
 
 echo "Building docker image..."
 docker build -t melt-umn/strategy-attributes . $@
 
 echo "Saving docker image..."
-docker save melt-umn/strategy-attributes -o dockerimage.tar
+docker save melt-umn/strategy-attributes -o $DOCKER_IMAGE_NAME
 
 echo "Building artifact.tar.gz ..."
-tar cvzf artifact.tar.gz dockerimage.tar examples/ INSTRUCTIONS.md
+tar czf $DOCKER_IMAGE_NAME $CONTENTS_LIST

@@ -25,7 +25,7 @@ Download this archive, inflate it, and change into the directory:
 
 The saved container extracted from the artifact tarball may be loaded by running
 ```
-% docker load -i dockerimage.tar
+% docker load -i melt-umn-strategy-attributes.docker
 ```
 
 The container may be run with the examples folder mounted by running
@@ -34,11 +34,11 @@ The container may be run with the examples folder mounted by running
 ```
 from the directory in which the artifact was extracted.
 
-## Basic Testing
-
 This will mount the local `examples/` folder in the home directory of the container,
 such that the example files may be viewed and edited with the editor of your choice,
 while any changes made are reflected in the container.
+
+## Basic Testing
 
 The home directory of the container contains several folders:
 * `silver/` contains an installation of Silver
@@ -51,18 +51,12 @@ The home directory of the container contains several folders:
   * `rewriting-regex-matching/` contains an implementation of regex matching using Brozozowski derivatives, with alternative mechanisms for simplifying intermediate regexes using both strategy attribute and term rewriting
   * `ableC-halide` is an ableC extension based on the Halide EDSL for specifying optimizing transformations on nested `for`-loops; strategy attributes are used in normalizing loops to have the expected form before transformations are applied.
 
-
-
-
-
-
-
-... run a few basic tests, mabye see that the optimization demo works ... 
+The optimization demo example can be tested using the container by changing into
+the `examples/rewriting-optimization-demo/` directory and running `./build && ./run-tests`.
 
 
 ## Continuing
 
-
 The generated files and image may be removed by running `./clean`.
 
-Step-by-step instructions explaining each of the examples can be found in `Step-By-Step-InstructionsS.md`.
+Step-by-step instructions explaining each of the examples can be found in `Step-By-Step-Instructions.md`.
