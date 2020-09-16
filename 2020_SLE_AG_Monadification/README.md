@@ -36,3 +36,5 @@ if a DOI is needed now to acquire this badge.
 
 Please see the [README.md](scripts/README.md) file in the
 [scripts](scripts) directory.
+
+All instruction combined can be found in [Instructions.md](Instructions.md).
