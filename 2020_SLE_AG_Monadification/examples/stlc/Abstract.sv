@@ -5,7 +5,7 @@ imports core:monad;
 
 
 Restricted inherited attribute gamma::[Pair<String Type>];
-Implicit synthesized attribute typ::Either<String Type>;
+Implicit synthesized attribute type::Either<String Type>;
 Unrestricted synthesized attribute errors::[String];
 
 Restricted inherited attribute substV::String;
@@ -29,14 +29,14 @@ Maybe<Type> ::= name::String gamma::[Pair<String Type>]
 }
 
 
-synthesized attribute singleSteps::[Expression]; --deterministic
-nonterminal Root with pp, typ, errors, nextStep, singleSteps;
+synthesized attribute singleSteps::[Expression];
+nonterminal Root with pp, type, errors, nextStep, singleSteps;
 
 abstract production root
 top::Root ::= e::Expression
 {
   restricted e.gamma = [];
-  implicit top.typ = e.typ;
+  implicit top.type = e.type;
   unrestricted top.errors = e.errors;
 
   unrestricted top.pp = e.pp;
@@ -52,18 +52,18 @@ top::Root ::= e::Expression
 
 
 nonterminal Expression with
-   gamma, typ, errors,
+   gamma, type, errors,
    substV, substE, substed, isvalue, nextStep,
    pp;
 
 abstract production var
 top::Expression ::= name::String
 {
-  implicit top.typ = case lookupType(name, top.gamma) of
-                     | just(x) -> x
-                     | nothing() -> left("Unknown variable " ++ name)
-                     end;
-  unrestricted top.errors = case top.typ of
+  implicit top.type = case lookupType(name, top.gamma) of
+                      | just(x) -> x
+                      | nothing() -> left("Unknown variable " ++ name)
+                      end;
+  unrestricted top.errors = case top.type of
                              | left(s) -> [s]
                              | _ -> []
                              end;
@@ -84,8 +84,8 @@ abstract production abs
 top::Expression ::= name::String ty::Type body::Expression
 {
   restricted body.gamma = [pair(name, ty)] ++ top.gamma;
-  implicit top.typ = arrow(ty, body.typ);
-  unrestricted top.errors = case top.typ, body.typ of
+  implicit top.type = arrow(ty, body.type);
+  unrestricted top.errors = case top.type, body.type of
                             | left(s), right(_) -> [s] ++ body.errors
                             | _, _ -> body.errors
                             end;
@@ -109,12 +109,12 @@ top::Expression ::= t1::Expression t2::Expression
 {
   restricted t1.gamma = top.gamma;
   restricted t2.gamma = top.gamma;
-  implicit top.typ = case t1.typ of
-                     | arrow(ty1, ty2) when tyEq(ty1, t2.typ) -> ty2
-                     | arrow(_, _) -> left("Application type mismatch")
-                     | _ -> left("Non-function applied")
-                     end;
-  unrestricted top.errors = case top.typ, t1.typ, t2.typ of
+  implicit top.type = case t1.type of
+                      | arrow(ty1, ty2) when tyEq(ty1, t2.type) -> ty2
+                      | arrow(_, _) -> left("Application type mismatch")
+                      | _ -> left("Non-function applied")
+                      end;
+  unrestricted top.errors = case top.type, t1.type, t2.type of
                             | left(s), right(ty1), right(ty2) -> [s] ++ t1.errors ++ t2.errors
                             | _, _, _ -> t1.errors ++ t2.errors
                             end;
@@ -143,11 +143,11 @@ top::Expression ::= t1::Expression t2::Expression
 {
   restricted t1.gamma = top.gamma;
   restricted t2.gamma = top.gamma;
-  implicit top.typ = case t1.typ, t2.typ of
-                     | bool(), bool() -> bool()
-                     | _, _ -> left("Both disjuncts must be of type Bool")
-                     end;
-  unrestricted top.errors = case top.typ, t1.typ, t2.typ of
+  implicit top.type = case t1.type, t2.type of
+                      | bool(), bool() -> bool()
+                      | _, _ -> left("Both disjuncts must be of type Bool")
+                      end;
+  unrestricted top.errors = case top.type, t1.type, t2.type of
                             | left(s), right(_), right(_) -> [s] ++ t1.errors ++ t2.errors
                             | _, _, _ -> t1.errors ++ t2.errors
                             end;
@@ -175,11 +175,11 @@ top::Expression ::= t1::Expression t2::Expression
 {
   restricted t1.gamma = top.gamma;
   restricted t2.gamma = top.gamma;
-  implicit top.typ = case t1.typ, t2.typ of
-                     | bool(), bool() -> bool()
-                     | _, _ -> left("Both conjuncts must be of type Bool")
-                     end;
-  unrestricted top.errors = case top.typ, t1.typ, t2.typ of
+  implicit top.type = case t1.type, t2.type of
+                      | bool(), bool() -> bool()
+                      | _, _ -> left("Both conjuncts must be of type Bool")
+                      end;
+  unrestricted top.errors = case top.type, t1.type, t2.type of
                             | left(s), right(ty1), right(ty2) -> [s] ++ t1.errors ++ t2.errors
                             | _, _, _ -> t1.errors ++ t2.errors
                             end;
@@ -205,7 +205,7 @@ top::Expression ::= t1::Expression t2::Expression
 abstract production tru_a
 top::Expression ::=
 {
-  implicit top.typ = bool();
+  implicit top.type = bool();
   unrestricted top.errors = [];
 
   restricted top.isvalue = true;
@@ -221,7 +221,7 @@ top::Expression ::=
 abstract production fals_a
 top::Expression ::=
 {
-  implicit top.typ = bool();
+  implicit top.type = bool();
   unrestricted top.errors = [];
 
   restricted top.isvalue = true;
@@ -238,11 +238,11 @@ abstract production not
 top::Expression ::= e::Expression
 {
   restricted e.gamma = top.gamma;
-  implicit top.typ = case e.typ of
-                     | bool() -> bool()
-                     | _ -> left("Not requires an argument of type Bool")
-                     end;
-  unrestricted top.errors = case top.typ, e.typ of
+  implicit top.type = case e.type of
+                      | bool() -> bool()
+                      | _ -> left("Not requires an argument of type Bool")
+                      end;
+  unrestricted top.errors = case top.type, e.type of
                             | left(s), right(_) -> [s] ++ e.errors
                             | _, _ -> e.errors
                             end;

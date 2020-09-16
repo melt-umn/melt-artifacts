@@ -1,11 +1,11 @@
-## Getting Started Guide
+# Getting Started Guide
 
 The instructions below will show evaluators how to "kick the tires" of
-the artifact to demonstrate that it works.  The The
+the artifact to demonstrate that it works.  The
 [Step-By-Step-Instructions.md](Step-By-Step-Instructions.md) describe
 the steps to take to carry out the actual evaluation.
 
-### Obtaining the Archive
+## Obtaining the Archive
 
 The archive containing the Docker image and associated files can be
 obtained from
@@ -18,11 +18,11 @@ Download this archive and inflate it.
 
 
 
-### Setting Up Docker
+## Setting Up Docker
 
 The Docker image needs to be loaded so Docker can find it.  To do
-this, run the follwing command in the directory where you inflated the
-archive:
+this, run the follwing command in the directory containing the
+contents of the archive:
 ```
 docker load -i melt-umn-implicit-monads.docker
 ```
@@ -33,7 +33,8 @@ paragraph) without doing this step again.
 
 Once the image has been loaded, you can enter the Docker image with
 the following command, replacing `{{PATH/TO/examples/}}` with the
-absolute path to the `examples` directory from the archive:
+absolute path to the `examples` directory from the archive (this can
+be done with `$PWD/examples/` on Linux and Mac):
 ```
 docker run -i -t -v {{PATH/TO/examples/}}:/root/examples/ melt-umn/implicit-monads
 ```
@@ -42,11 +43,11 @@ you to a shell in the Docker image, with the prompt
 ```
 implicit-monads:~ >
 ```
-This shows you are working in the Docker image.
+This shows you are working inside the Docker image.
 
 
 
-### Basic Testing
+## Basic Testing
 
 Try listing the files in the current directory:
 ```
@@ -108,14 +109,15 @@ If the output was as expected, the Docker image is working correctly.
 
 
 
-### Continuing
+## Continuing
 
 Now that the Docker image is working and the `examples` directory is
 mounted correctly, you can continue to the step-by-step walkthrough of
 the artifact.  This was included in the archive and is in the
-`Step-Bi-Step-Instructions.md` document.  It can also be viewed
-online, where the markdown is rendered to HTML,
-[here](https://github.com/melt-umn/melt-artifacts/blob/master/2020_SLE_AG_Monadification/Step-By-Step-Instructions.md).
+`Step-By-Step-Instructions.md` document.  It can also be viewed
+online at
+[here](https://github.com/melt-umn/melt-artifacts/blob/master/2020_SLE_AG_Monadification/Step-By-Step-Instructions.md),
+where the markdown is rendered to HTML.
 
 
 Because the `examples` directory is mounted in the Docker image rather
@@ -123,5 +125,5 @@ than being part of the Docker image, changes made to the files in the
 `examples` directory will be available in the Docker image.  This
 allows any files from this directory to be viewed and edited using a
 text editor installed on the current machine rather than one in the
-Docker image.
+Docker image.  Only the commands need to be run in the Docker image.
 
