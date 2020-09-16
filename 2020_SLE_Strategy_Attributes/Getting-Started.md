@@ -14,10 +14,9 @@ The correct archive is
 ```
 2020_SLE_Strategy_Attributes.tar.gz
 ```
-Download this archive, inflate it, and change into the directory:
+Download this archive and inflate it:
 ```
 % tar xzf 2020_SLE_Strategy_Attributes.tar.gz
-% cd 2020_SLE_Strategy_Attributes
 ```
 
 
@@ -32,7 +31,9 @@ The container may be run with the examples folder mounted by running
 ```
 % docker run -itv $PWD/examples:/root/examples melt-umn/strategy-attributes
 ```
-from the directory in which the artifact was extracted.
+from the directory in which the artifact was extracted.  (Note on Windows you may
+need to change `$PWD` to the full path to the directory in which the artifact
+was extracted.
 
 This will mount the local `examples/` folder in the home directory of the container,
 such that the example files may be viewed and edited with the editor of your choice,
