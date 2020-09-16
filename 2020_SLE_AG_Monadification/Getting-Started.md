@@ -115,3 +115,11 @@ the artifact.  This was included in the archive and is in the
 online, where the markdown is rendered to HTML,
 [here](https://github.com/melt-umn/melt-artifacts/blob/master/2020_SLE_AG_Monadification/Step-By-Step-Instructions.md).
 
+
+Because the `examples` directory is mounted in the Docker image rather
+than being part of the Docker image, changes made to the files in the
+`examples` directory will be available in the Docker image.  This
+allows any files from this directory to be viewed and edited using a
+text editor installed on the current machine rather than one in the
+Docker image.
+
