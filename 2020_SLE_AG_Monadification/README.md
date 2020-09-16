@@ -12,7 +12,8 @@ documents included in the artifact:
    file has instruction to walk though the examples to carry out the
    actual evaluation.
 
-A copy of the submitted SLE paper is also included.
+A copy of the submitted SLE paper is also included, it will be
+replaced with the final version of the paper when it is complete.
 
 Please note that the artifact download site is a temporary one.  Once
 we have taken any feedback from the evaluators into account a final
