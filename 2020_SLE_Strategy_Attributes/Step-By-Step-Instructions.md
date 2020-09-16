@@ -10,8 +10,8 @@ This example demonstrates the use of strategy attributes to perform optimization
 cd examples/rewriting-optimization-demo/
 ```
 
-The Silver specification of this example language is provided in the `grammars/` subdirectory.  The abstract syntax, consisting of top-level function declarations, expressions and let-binding declarations, is given in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`.  Figure 1 of the paper shows some of the attributes and productions that are to be found in this file.  Additional attributes, such as ``wrapPP`` are included here that are not seen in that figure. (Lucas, why is FunDecl here - I don't see this in Figure 1.  If we need to kepp this then the difference from the paper should be explained.  Much better is to make this match the paper.)
- Another minor difference is that equations for the ``defs`` attribute are actually in another file, `grammars/edu.umn.melt.rewritedemo/abstractsyntax/Optimize.sv` that contains the strategies and attributes used to perform optimizations and seen in Figures 3, 6, and 7.
+The Silver specification of this example language is provided in the `grammars/` subdirectory.  The abstract syntax, consisting of top-level function declarations, expressions and let-binding declarations, is given in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`.  Figure 1 of the paper shows some of the attributes and productions that are to be found in this file.  Additional attributes, such as ``wrapPP`` are included here that are not seen in that figure. 
+Another minor difference is that equations for the ``defs`` attribute are actually in another file, `grammars/edu.umn.melt.rewritedemo/abstractsyntax/Optimize.sv` that contains the strategies and attributes used to perform optimizations and seen in Figures 3, 6, and 7.
 
 Concrete syntax for building a parser is given in `grammars/edu.umn.melt.rewritedemo/concretesyntax/` and a driver program performing I/O operations is defined in ``grammars/edu.umn.melt.rewritedemo/driver``; you do not need to consider these as the paper and examples are concerned with transformations on abstract syntax.
 
@@ -23,12 +23,10 @@ This may take a few seconds, and should produce an executable jar file named `re
 
 A number of example programs of the demo language with the name `*.demo` are provided in the directory.  For simplicity, each program in this demo language consists of a single top-level function declaration, with an expression as the body.
 
-The compiled program can be run on a particular example (e.g. `e2_error.demo`) by running
-
-( Lucas - why mention an "error" program here?  Are any errors reported?  We should start with non-error cases.)
+The compiled program can be run on a particular example (e.g. `e2_free.demo`) by running
 
 ```
-java -jar rewritedemo.jar e2_error.demo
+java -jar rewritedemo.jar e2_free.demo
 ```
 This pretty-prints the original program, the list of free (unbound) variables in the program, and the program after two different optimization passes; for example the above should print
 ```
@@ -55,19 +53,20 @@ fun e2() =
 fun e2() =
   (foo + bar) + 6;
 ```
-Here the function body references variables `foo` and `bar` that have no definition, thus they are reported as free.
+Here the function body references variables `foo` and `bar` that have no definition, thus they are reported as free variables (in a real language this could be an error message of some kind.)
 
 In the first optimization pass (implemented by the `optimize` strategy attribute on line 14 in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/Optimize.sv`), all expressions involving numeric operations are simplified as much as possible.  The `optimizeStep` strategy attribute on line 5 of this file encode the rewrite rules in the second column of page 2 of the paper and realized as strategy attributes in Figure 3 of the paper.  In this example `foo - (-bar)` is simplified to `foo + bar` and `a + (10 - 4)` becomes `a + 6`.  However all `let`-bindings are left intact, despite having only one reference.
 
-In the second optimization pass (implemented by the `optimizeInline` strategy attribute in the same file on line 77), deeper structural transformations are performed.  These can be seen in the paper in Figures 6 and 7. The body of `e6` is further reduced to `(foo + bar) + 6`, by observing that the `let`-variables are only referenced in at most one place each, and thus the let-bindings can be safely eliminated without duplicating any computations.
+In the second optimization pass (implemented by the `optimizeInline` strategy attribute in the same file on line 77), deeper structural transformations are performed.  These can be seen in the paper in Figures 6 and 7. The body of `e6` is further reduced to `(foo + bar) + 6`, by observing that the `let`-variables are only referenced in at most one place each, and thus the let-bindings can be safely inlined without duplicating any computations.
 
 All of the examples may be easily be run at once by executing
 ```
 % ./run-tests
 ```
 
+
 ## Lambda calculus example
-This example is an implementation of the untyped lambda-calculus, as seen in Appendix B.1 of the paper. Change into the `examples/rewriting-optimization-demo/` directory:
+This example is an implementation of the untyped lambda-calculus, as seen in Section 5.1 and Figure 13 of Appendix B.1 of the paper. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
 % cd ~/examples/rewriting-lambda-calculus/
 ```
@@ -102,7 +101,7 @@ The default definition of the `eval` strategy on line 55 of `grammars/edu.umn.cs
 
 
 ## Regex matching with Brzozowski derivatives
-This example demonstrates an implementation of regex matching using Brzozoski derivatives, as seen in Appendix B.2 of the paper.  Change into the `examples/rewriting-regex-matching/` directory:
+This example demonstrates an implementation of regex matching using Brzozowski derivatives, as seen in Section 5.2 and Figure 14 of Appendix B.2 of the paper.  Change into the `examples/rewriting-regex-matching/` directory:
 ```
 % cd ~/examples/rewriting-regex-matching/
 ```
@@ -135,7 +134,7 @@ A test script is also provided containing a number of additional test cases as e
 
 
 ## Loop normalization in the ableC-Halide extension
-The ableC-Halide extension is a sophisticated extension to ableC for specifying optimizing transformations on nested `for`-loops, inspired by the Halide C++ embedded domain-specific language.  Before loops can be transformed they must have the correct form; this normalization process is accomplished by strategy attributes.
+The ableC-Halide extension is a sophisticated extension to ableC for specifying optimizing transformations on nested `for`-loops, inspired by the Halide C++ embedded domain-specific language.  Before loops can be transformed they must have the correct form; this normalization process is accomplished by strategy attributes.  This extension is discussed in Section 5.3 of the paper with a portion of the implementation shown in Figure 15 of Appendix B.3.
 
 Change into the `examples/ableC-halide/` directory:
 ```
@@ -168,3 +167,7 @@ In the `matmul.xc` program all for-loops were defined using an additional `foral
 ```
 
 You may also try editing `irregular.out` to change the loop expressions within the `transform {}` block, to see how effective the strategies are in normalizing complex loop conditions.
+
+
+## Use of strategy attributes in optimizing strategies for translation
+The last use of strategy attributes described in the paper is their use in optimizing strategy expressions for more efficient translation, as a part of their implementation in the Silver compiler.  This is described in Section 5.4 and Figure 16 of Appendix B.4 in the paper.  As this use of strategy attributes is tightly coupled with the Silver compiler (and is run for every Silver build that involves strategy attributes) it is difficult to provide a straightforward demo.  However the complete source code of this application can be found in the `silver/` repository folder at `silver/grammars/silver/extension/strategyattr/StrategyExpr.sv`
