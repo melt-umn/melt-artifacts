@@ -7,7 +7,8 @@
 set -euxo pipefail
 
 DOCKER_IMAGE_NAME=melt-umn-strategy-attributes.docker
-CONTENTS_LIST="examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md" # ../Authors.txt ../Abstract.txt ../preliminary-paper.pdf
+TARBALL_NAME="2020_SLE_Strategy_Attributes.tar.gz"
+CONTENTS_LIST="examples/ ../Step-By-Step-Instructions.md ../Getting-Started.md ../Abstract.txt" # ../preliminary-paper.pdf
 
 echo "Deleting old examples..."
 rm -rf examples/*
@@ -32,4 +33,4 @@ echo "Saving docker image..."
 docker save melt-umn/strategy-attributes -o $DOCKER_IMAGE_NAME
 
 echo "Building artifact.tar.gz ..."
-tar czf $DOCKER_IMAGE_NAME $CONTENTS_LIST
+tar czf $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST

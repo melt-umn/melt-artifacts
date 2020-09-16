@@ -1,6 +1,4 @@
-# Monadification of Attribute Grammars - software artifact
-
-## For artifact evaluators
+# Strategic Tree Rewriting in Attribute Grammars - software artifact
 
 To evaluate this software artifact, please see the following
 documents included in the artifact:
@@ -30,11 +28,3 @@ will be included in the final version of our paper. If the evaluators
 would like to see this done sooner so that the "artifact available"
 badge can be assigned we would be happy to do so.  Please let us know
 if a DOI is needed now to acquire this badge.
-
-
-## For MELT group developers
-
-Please see the [README.md](scripts/README.md) file in the
-[scripts](scripts) directory.
-
-All instruction combined can be found in [Instructions.md](Instructions.md).
