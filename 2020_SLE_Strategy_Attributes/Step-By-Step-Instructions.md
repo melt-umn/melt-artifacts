@@ -1,17 +1,19 @@
-# Step by step instructions for artifact evaluation
+# Step by Step Instructions
 
 Before running these examples, follow the instructions in `Getting-Started.md` to initialize the docker container.
 
-The examples are all located in the top-level `examples/` folder; the other directories contain clones of dependency git repositories and may be ignored.
+The examples are all located in the top-level `examples/` folder; the other directories contain clones of dependency Git repositories and may be ignored.
 
 ## Optimization demo example
-This example demonstrates the use of strategy attributes to perform optimizations on a simple functional language, as seen in the paper. Change into the `examples/rewriting-optimization-demo/` directory:
+This example demonstrates the use of strategy attributes to perform optimizations on a simple functional language, as seen in the paper, specifically in Figures 1, 3, 6, and 7. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
-cd ~/examples/rewriting-optimization-demo/
+cd examples/rewriting-optimization-demo/
 ```
 
-The Silver specification of this example language is provided in the `grammars/` subdirectory.  The abstract syntax, consisting of top-level function declarations, expressions and let-binding declarations, is given in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv` while the strategies and attributes used to perform optimizations are defined in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`.
-Concrete syntax for building a parser is given in `grammars/edu.umn.melt.rewritedemo/concretesyntax/` and a driver program performing I/O operations is defined in ``grammars/edu.umn.melt.rewritedemo/driver`; you do not need to carefully examine these as the examples here are mainly concerned with transformations on abstract syntax.
+The Silver specification of this example language is provided in the `grammars/` subdirectory.  The abstract syntax, consisting of top-level function declarations, expressions and let-binding declarations, is given in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`.  Figure 1 of the paper shows some of the attributes and productions that are to be found in this file.  Additional attributes, such as ``wrapPP`` are included here that are not seen in that figure. (Lucas, why is FunDecl here - I don't see this in Figure 1.  If we need to kepp this then the difference from the paper should be explained.  Much better is to make this match the paper.)
+ Another minor difference is that equations for the ``defs`` attribute are actually in another file, `grammars/edu.umn.melt.rewritedemo/abstractsyntax/Optimize.sv` that contains the strategies and attributes used to perform optimizations and seen in Figures 3, 6, and 7.
+
+Concrete syntax for building a parser is given in `grammars/edu.umn.melt.rewritedemo/concretesyntax/` and a driver program performing I/O operations is defined in ``grammars/edu.umn.melt.rewritedemo/driver``; you do not need to consider these as the paper and examples are concerned with transformations on abstract syntax.
 
 To compile the Silver specification, run
 ```
@@ -22,6 +24,9 @@ This may take a few seconds, and should produce an executable jar file named `re
 A number of example programs of the demo language with the name `*.demo` are provided in the directory.  For simplicity, each program in this demo language consists of a single top-level function declaration, with an expression as the body.
 
 The compiled program can be run on a particular example (e.g. `e2_error.demo`) by running
+
+( Lucas - why mention an "error" program here?  Are any errors reported?  We should start with non-error cases.)
+
 ```
 java -jar rewritedemo.jar e2_error.demo
 ```
@@ -52,9 +57,9 @@ fun e2() =
 ```
 Here the function body references variables `foo` and `bar` that have no definition, thus they are reported as free.
 
-In the first optimization pass (implemented by the `optimize` strategy attribute in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`), all expressions involving numeric operations are simplified as much as possible.  In this case `foo - (-bar)` is simplified to `foo + bar` and `a + (10 - 4)` becomes `a + 6`.  However all `let`-bindings are left intact, despite having only one reference.
+In the first optimization pass (implemented by the `optimize` strategy attribute on line 14 in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/Optimize.sv`), all expressions involving numeric operations are simplified as much as possible.  The `optimizeStep` strategy attribute on line 5 of this file encode the rewrite rules in the second column of page 2 of the paper and realized as strategy attributes in Figure 3 of the paper.  In this example `foo - (-bar)` is simplified to `foo + bar` and `a + (10 - 4)` becomes `a + 6`.  However all `let`-bindings are left intact, despite having only one reference.
 
-In the second optimization pass (implemented by the `optimizeInline` strategy attribute in the same file), deeper structural transformations are performed.  The body of `e6` is further reduced to `(foo + bar) + 6`, by observing that the `let`-variables are only referenced in at most one place each, and thus the let-bindings can be safely eliminated without duplicating any computations.
+In the second optimization pass (implemented by the `optimizeInline` strategy attribute in the same file on line 77), deeper structural transformations are performed.  These can be seen in the paper in Figures 6 and 7. The body of `e6` is further reduced to `(foo + bar) + 6`, by observing that the `let`-variables are only referenced in at most one place each, and thus the let-bindings can be safely eliminated without duplicating any computations.
 
 All of the examples may be easily be run at once by executing
 ```
