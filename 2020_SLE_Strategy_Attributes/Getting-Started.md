@@ -18,6 +18,8 @@ Download this archive and inflate it:
 ```
 % tar xzf 2020_SLE_Strategy_Attributes.tar.gz
 ```
+(On Windows there may not be this ``tar`` command and something else
+will need to be used.)
 
 
 ## Setting Up Docker
@@ -55,9 +57,12 @@ The home directory of the container contains several folders:
 The optimization demo example can be tested using the container by changing into
 the `examples/rewriting-optimization-demo/` directory and running `./build && ./run-tests`.
 
+This should generate the following output:
+```
+put the output here
+```
+If this is what is displayed then the artifact should be working.
 
 ## Continuing
-
-The generated files and image may be removed by running `./clean`.
 
 Step-by-step instructions explaining each of the examples can be found in `Step-By-Step-Instructions.md`.

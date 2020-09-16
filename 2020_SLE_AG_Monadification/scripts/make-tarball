@@ -67,7 +67,7 @@ fi
 
 #Build the tarball
 echo "***** Building archive $TARBALL_NAME *****"
-tar -c -f $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
+tar -c -z -f $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
 
 
 

@@ -1,11 +1,182 @@
+# Monadification of Attribute Grammars - Software Artifact
 
-# Step-By-Step Instructions
+To evaluate this software artifact, please see the following
+documents included in the artifact:
+
+1. The [Getting-Started.md](Getting-Started.md) file has instructions on
+   installing and testing the artifact to see that it can be run
+   correctly on evaluators' computers.
+2. The [Step-By-Step-Instructions.md](Step-By-Step-Instructions.md)
+   file has instruction to walk though the examples to carry out the
+   actual evaluation.
+
+A copy of the submitted SLE paper is also included, it will be
+replaced with the final version of the paper when it is complete.
+
+Please note that the artifact download site is a temporary one.  Once
+we have taken any feedback from the evaluators into account a final
+version will be prepared and place in the Data Repository for the
+University of Minnesota:
+[https://conservancy.umn.edu/](https://conservancy.umn.edu/).  The
+data and other artifacts placed here are archived by the University of
+Minnesota libraries in perpetuity and are assigned digital object
+identifier numbers (DOIs).  A previous software artifact for a paper
+at OOPSLA is archived there now, with the DOI/url of
+[https://doi.org/10.13020/D6VQ25](https://doi.org/10.13020/D6VQ25).
+We will follow the same process for this artifact.  The DOI for it
+will be included in the final version of our paper. If the evaluators
+would like to see this done sooner so that the "artifact available"
+badge can be assigned we would be happy to do so.  Please let us know
+if a DOI is needed now to acquire this badge.
 
 
 
 
 
-## Attribute Grammars
+
+
+## Getting Started Guide
+
+The instructions below will show evaluators how to "kick the tires" of
+the artifact to demonstrate that it works.  The
+[Step-By-Step-Instructions.md](Step-By-Step-Instructions.md) describe
+the steps to take to carry out the actual evaluation.
+
+### Obtaining the Archive
+
+The archive containing the Docker image and associated files can be
+obtained from
+[melt.cs.umn.edu/melt-artifacts/](http://melt.cs.umn.edu/melt-artifacts/).
+The correct archive is
+```
+2020_SLE_AG_Monadification.tar.gz
+```
+Download this archive and inflate it.
+
+
+
+### Setting Up Docker
+
+The Docker image needs to be loaded so Docker can find it.  To do
+this, run the following command in the directory containing the
+contents of the archive:
+```
+docker load -i melt-umn-implicit-monads.docker
+```
+This may require superuser privileges.  This step only needs to be
+done once; the Docker image may then be run (explained in the next
+paragraph) without doing this step again.
+
+
+Once the image has been loaded, you can enter the Docker image with
+the following command, replacing `{{PATH/TO/examples/}}` with the
+absolute path to the `examples` directory from the archive (this can
+be done with `$PWD/examples/` on Linux and Mac):
+```
+docker run -i -t -v {{PATH/TO/examples/}}:/root/examples/ melt-umn/implicit-monads
+```
+This command may also require superuser privileges.  This will bring
+you to a shell in the Docker image, with the prompt
+```
+implicit-monads:~ >
+```
+This shows you are working inside the Docker image.
+
+
+
+### Basic Testing
+
+Try listing the files in the current directory:
+```
+ls
+```
+This should list three directories:
+```
+bin  examples  silver
+```
+Enter the `examples` directory:
+```
+cd examples
+```
+List the files in this directory:
+```
+ls
+```
+This should list three directories:
+```
+calculator  camlLight  stlc
+```
+This shows the `examples` directory has been correctly mounted in the
+Docker image.
+
+
+Enter the `calculator` directory:
+```
+cd calculator
+```
+Compile the calculator grammar:
+```
+./silver-compile
+```
+The output of this command should end with `BUILD SUCCESSFUL` and the
+build time.  Once the build has ended, run
+```
+./run
+```
+This will bring up a prompt
+```
+Enter an expression: 
+```
+Enter the following two expressions and check that the output is as
+expected, then enter a blank line at the third prompt to exit:
+```
+Enter an expression:  3 + 4
+Expression:  (3.0) + (4.0)
+Value:  7.0
+Implicit Value:  7.0
+
+Enter an expression:  3 / 0
+Expression:  (3.0) / (0.0)
+Value:  no value
+Implicit Value:  no value
+
+Enter an expression: 
+```
+If the output was as expected, the Docker image is working correctly.
+
+
+
+### Continuing
+
+Now that the Docker image is working and the `examples` directory is
+mounted correctly, you can continue to the step-by-step walkthrough of
+the artifact.  This was included in the archive, is in the
+`Step-By-Step-Instructions.md` document, and follows here.  It can
+also be viewed online at
+[here](https://github.com/melt-umn/melt-artifacts/blob/master/2020_SLE_AG_Monadification/Step-By-Step-Instructions.md),
+where the markdown is rendered to HTML.
+
+
+Because the `examples` directory is mounted in the Docker image rather
+than being part of the Docker image, changes made to the files in the
+`examples` directory will be available in the Docker image.  This
+allows any files from this directory to be viewed and edited using a
+text editor installed on the current machine rather than one in the
+Docker image.  Only the commands need to be run in the Docker image.
+
+
+
+
+
+
+
+## Step-By-Step Instructions
+
+
+
+
+
+### Attribute Grammars
 
 Attribute grammars describe the semantics of languages by associating
 semantic attributes with nodes in an abstract syntax tree.  The values
@@ -18,7 +189,7 @@ expression.
 
 
 
-## Notational Differences
+### Notational Differences
 
 In the paper, we used notation independent of any particular
 attribute-grammar system, notation which would be recognizable to
@@ -43,7 +214,7 @@ encountered.
 
 
 
-## Monads
+### Monads
 
 Our examples will use two monads implicitly for our monadification,
 `Maybe` and `Either`.
@@ -72,7 +243,7 @@ Either<Int T> would contain an error code.
 
 
 
-## Monadification
+### Monadification
 
 Our monadification is a rewriting which allows us to use monads
 implicitly in attribute equations.  Implicit use of a monad means that
@@ -93,7 +264,7 @@ cases as well.
 
 
 
-## Example:  Calculator
+### Example:  Calculator
 
 In the directory for examples, we have an example named `calculator`.
 Enter the directory for this example:
@@ -202,7 +373,7 @@ equations used for `value`.
 
 
 
-## Example:  Simply-Typed Lambda Calculus with Booleans
+### Example:  Simply-Typed Lambda Calculus with Booleans
 
 In the directory for examples (`examples/` in the directory where the
 archive was inflated), we have an example named `stlc`.  Enter the
@@ -246,7 +417,7 @@ calculator example above.  Please open the `Abstract.sv` file in your
 preferred editor.
 
 
-### Typing
+#### Typing
 
 We have three attributes associated with typing, `gamma`, which
 represents the typing context; `type`, which represents the type of an
@@ -322,7 +493,7 @@ variable.  We match on the `just` and `nothing` constructors to turn
 this `Maybe` into an `Either`.
 
 
-### Evaluation
+#### Evaluation
 
 We define single-step evaluation using the `nextStep` attribute.  This
 is an implicit attribute making use of the `Maybe` monad to represent
@@ -344,7 +515,7 @@ not requiring failure cases to be written, as we saw with the
 
 
 
-## Example: Caml Light
+### Example: Caml Light
 
 In the directory for examples, we have an example named `camlLight`,
 an implementation of type inference for the [Caml Light programming
@@ -386,7 +557,7 @@ and being monadified, along with versions of them which use monads
 explicitly.
 
 
-### Let Expression
+#### Let Expression
 
 On line 14 in `abstractSyntax/Expr.sv`, we have a production for
 typing a `let` expression using monads implicitly, which will be
@@ -410,7 +581,7 @@ unwraps the `Boolean` value inside the potential failure from typing
 the bound expressions.
 
 
-#### Let Examples
+##### Let Examples
 
 We have a file of examples of `let` typing, including both typable and
 untypable expressions.  This file can be run from the `camlLight`
@@ -460,7 +631,7 @@ the implicit version.
 
 
 
-### If-Then-Else Expression
+#### If-Then-Else Expression
 
 On line 239, we have another production using monads implicitly, this
 time for `if-then-else`, with a commented-out version on line 269.  On
@@ -491,7 +662,7 @@ type or not.  If it is `Boolean`, we must then test whether the
 branches have the same type.
 
 
-#### If-Then-Else Examples
+##### If-Then-Else Examples
 
 We have a file of examples of `if-then-else` typing, including both
 typable and untypable expressions.  This file can be run from the
@@ -545,7 +716,7 @@ the implicit version.
 
 
 
-### Another Example
+#### Another Example
 
 We have an example in `sample_programs/btree.demo` defining a type for
 binary trees and defining functions over it.  This can be run with

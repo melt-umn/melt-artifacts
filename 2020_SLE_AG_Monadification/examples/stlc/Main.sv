@@ -24,7 +24,7 @@ IOVal<Integer> ::= largs::[String] ioin::IO
   local attribute print_success :: IO;
   print_success =
        print("Expression:  " ++ r.pp ++ "\n" ++
-             "Type:        " ++ typeToString(r.typ) ++ "\n" ++
+             "Type:        " ++ typeToString(r.type) ++ "\n" ++
              "Errors:      " ++ errorsToString(r.errors) ++ "\n" ++
              "SingleSteps Attribute (Evaluation Trace):\n   " ++ listToString_Expression(r.singleSteps),
              ioin);
