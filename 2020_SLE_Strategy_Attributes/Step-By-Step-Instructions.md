@@ -7,7 +7,7 @@ The examples are all located in the top-level `examples/` folder; the other dire
 ## Optimization demo example
 This example demonstrates the use of strategy attributes to perform optimizations on a simple functional language, as seen in the paper, specifically in Figures 1, 3, 6, and 7. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
-cd examples/rewriting-optimization-demo/
+cd ~/examples/rewriting-optimization-demo/
 ```
 
 The Silver specification of this example language is provided in the `grammars/` subdirectory.  The abstract syntax, consisting of top-level function declarations, expressions and let-binding declarations, is given in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`.  Figure 1 of the paper shows some of the attributes and productions that are to be found in this file.  Additional attributes, such as ``wrapPP`` are included here that are not seen in that figure. 
@@ -68,7 +68,7 @@ All of the examples may be easily be run at once by executing
 ## Lambda calculus example
 This example is an implementation of the untyped lambda-calculus, as seen in Section 5.1 and Figure 13 of Appendix B.1 of the paper. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
-% cd examples/rewriting-lambda-calculus/
+% cd ~/examples/rewriting-lambda-calculus/
 ```
 
 The directory structure is similar to the previous example.  The strategy attributes for normalization to head-normal form are defined in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalStrategyAttr.sv` (a prior implementation of the same rewrite rules using a reflection-based mechanism for rewriting undecorated terms in Silver is given in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalTermRewrite.sv`.)
@@ -103,7 +103,7 @@ The default definition of the `eval` strategy on line 55 of `grammars/edu.umn.cs
 ## Regex matching with Brzozowski derivatives
 This example demonstrates an implementation of regex matching using Brzozowski derivatives, as seen in Section 5.2 and Figure 14 of Appendix B.2 of the paper.  Change into the `examples/rewriting-regex-matching/` directory:
 ```
-% cd examples/rewriting-regex-matching/
+% cd ~/examples/rewriting-regex-matching/
 ```
 
 The directory structure is similar to the previous examples.  The abstract syntax of regular expressions, and attributes for matching and simplification, are defined in `grammars/edu.umn.cs.melt.rewritingRegexMatching/abstractsyntax/AbstractSyntax.sv`.  Here the function `matches` (line 83) drives the matching process, by repeatedly computing the Brzozowski derivative of the regex with respect to each character of the string (implemented by the `deriv` and `wrt` attributes) and simplifying the resulting regular expression.  The original regex matches the string if and only if the final regex is nullable (implemented by the `nullable` attribute.)
@@ -138,7 +138,7 @@ The ableC-Halide extension is a sophisticated extension to ableC for specifying 
 
 Change into the `examples/ableC-halide/` directory:
 ```
-% cd examples/ableC-halide/
+% cd ~/examples/ableC-halide/
 ```
 
 The extension directory contains several subdirectories.  The
