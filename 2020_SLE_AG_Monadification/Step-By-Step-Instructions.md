@@ -348,8 +348,8 @@ not requiring failure cases to be written, as we saw with the
 
 In the directory for examples, we have an example named `camlLight`,
 an implementation of type inference for the [Caml Light programming
-language](ocaml.org/caml-light/).  This language is a subset of the
-OCaml language.  Enter the directory for this example:
+language](https://ocaml.org/caml-light/).  This language is a subset
+of the OCaml language.  Enter the directory for this example:
 ```
 cd camlLight
 ```
