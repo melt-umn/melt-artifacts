@@ -68,7 +68,7 @@ All of the examples may be easily be run at once by executing
 ## Lambda calculus example
 This example is an implementation of the untyped lambda-calculus, as seen in Section 5.1 and Figure 13 of Appendix B.1 of the paper. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
-% cd ~/examples/rewriting-lambda-calculus/
+% cd examples/rewriting-lambda-calculus/
 ```
 
 The directory structure is similar to the previous example.  The strategy attributes for normalization to head-normal form are defined in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalStrategyAttr.sv` (a prior implementation of the same rewrite rules using a reflection-based mechanism for rewriting undecorated terms in Silver is given in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalTermRewrite.sv`.)
@@ -103,7 +103,7 @@ The default definition of the `eval` strategy on line 55 of `grammars/edu.umn.cs
 ## Regex matching with Brzozowski derivatives
 This example demonstrates an implementation of regex matching using Brzozowski derivatives, as seen in Section 5.2 and Figure 14 of Appendix B.2 of the paper.  Change into the `examples/rewriting-regex-matching/` directory:
 ```
-% cd ~/examples/rewriting-regex-matching/
+% cd examples/rewriting-regex-matching/
 ```
 
 The directory structure is similar to the previous examples.  The abstract syntax of regular expressions, and attributes for matching and simplification, are defined in `grammars/edu.umn.cs.melt.rewritingRegexMatching/abstractsyntax/AbstractSyntax.sv`.  Here the function `matches` (line 83) drives the matching process, by repeatedly computing the Brzozowski derivative of the regex with respect to each character of the string (implemented by the `deriv` and `wrt` attributes) and simplifying the resulting regular expression.  The original regex matches the string if and only if the final regex is nullable (implemented by the `nullable` attribute.)
@@ -138,14 +138,23 @@ The ableC-Halide extension is a sophisticated extension to ableC for specifying 
 
 Change into the `examples/ableC-halide/` directory:
 ```
-% cd ~/examples/ableC-halide/
+% cd examples/ableC-halide/
 ```
 
-The extension directory contains several subdirectories.  The specification of the extension is defined in the `grammars/` folder; the use of strategy attribute for normalization occurs in `grammars/edu.umn.cs.melt.exts.ableC.halide/abstractsyntax/IterStmt.sv`.  A number of example programs using the extension are provided in the `examples/` folder, the `tests/` folder contains more tests programs (including some with semantic errors), and the `modular_analyses/` folder contains specifications of analyses to ensure that composing with independent extensions will not introduce parser table conflicts or missing equations.  All of the examples and test cases may be built and run by running `make -j` at the top level, however this will take several minutes and is not required to run the examples.
+The extension directory contains several subdirectories.  The
+specification of the extension is defined in the `grammars/` folder;
+the use of strategy attribute for normalization occurs in
+`grammars/edu.umn.cs.melt.exts.ableC.halide/abstractsyntax/IterStmt.sv`.  
+To implement the translations of extension constructs into plain C
+code a number of strategy attributes are used.  These include the
+`simplifyNumericExprStep` strategy starting on line 43 and
+`preprocessLoop` starting on line 75.  This last strategy normalizes
+for-loops to simplify later stages of the translation.
+A number of example programs using the extension are provided in the `examples/` folder, the `tests/` folder contains more tests programs (including some with semantic errors), and the `modular_analyses/` folder contains specifications of analyses to ensure that composing with independent extensions will not introduce parser table conflicts or missing equations.  All of the examples and test cases may be built and run by running `make -j` at the top level, however this will take several minutes and is not required to run the examples.
 
 Change into the `examples/` directory:
 ```
-% cd ~/examples/
+% cd examples/
 ```
 
 A nontrivial example use of the extension is in `matmul.xc`.  This program provides two implementations of a matrix multiplication, one unoptimized and the other with a number of optimizing transformations applied.  This may be built and run by typing
@@ -166,7 +175,7 @@ In the `matmul.xc` program all for-loops were defined using an additional `foral
 % ./irregular.out
 ```
 
-You may also try editing `irregular.out` to change the loop expressions within the `transform {}` block, to see how effective the strategies are in normalizing complex loop conditions.
+You may also try editing `irregular.xc` to change the loop expressions within the `transform {}` block, to see how effective the strategies are in normalizing complex loop conditions.
 
 
 ## Use of strategy attributes in optimizing strategies for translation
