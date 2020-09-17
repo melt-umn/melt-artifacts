@@ -99,4 +99,13 @@ If this is what is displayed then the artifact should be working.
 
 ## Continuing
 
-Step-by-step instructions explaining each of the examples can be found in `Step-By-Step-Instructions.md`.
+Step-by-step instructions explaining each of the examples can be found in [Step-By-Step-Instructions.md](Step-By-Step-Instructions.md).
+
+
+Because the `examples` directory is mounted in the Docker image rather
+than being part of the Docker image, changes made to the files in the
+`examples` directory will be available in the Docker image.  This
+allows any files from this directory to be viewed and edited using a
+text editor installed on the current machine rather than one in the
+Docker image.  Only the commands need to be run in the Docker image.
+
