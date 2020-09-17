@@ -59,7 +59,41 @@ the `examples/rewriting-optimization-demo/` directory and running `./build && ./
 
 This should generate the following output:
 ```
-put the output here
+Compiling edu:umn:cs:melt:rewritedemo:driver
+	[grammars/edu.umn.cs.melt.rewritedemo/driver/]
+	[Main.sv]
+Found core:monad
+	[/root/silver/generated/src/core/monad/Silver.svi]
+Found silver:langutil
+	[/root/silver/generated/src/silver/langutil/Silver.svi]
+Found silver:langutil:pp
+	[/root/silver/generated/src/silver/langutil/pp/Silver.svi]
+Compiling edu:umn:cs:melt:rewritedemo:abstractsyntax
+	[grammars/edu.umn.cs.melt.rewritedemo/abstractsyntax/]
+	[Optimize.sv AbstractSyntax.sv]
+Compiling edu:umn:cs:melt:rewritedemo:concretesyntax
+	[grammars/edu.umn.cs.melt.rewritedemo/concretesyntax/]
+	[ConcreteSyntax.sv]
+...
+
+Testing e6.demo
+fun e6() =
+  (1 + 2) + foo(3 + 4, 5 - 6);
+
+==============
+
+Free variables: 
+
+==============
+
+fun e6() =
+  3 + foo(7, -1);
+
+==============
+
+fun e6() =
+  3 + foo(7, -1);
+exit code 0
 ```
 If this is what is displayed then the artifact should be working.
 
