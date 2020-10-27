@@ -7,7 +7,7 @@ The examples are all located in the top-level `examples/` folder; the other dire
 ## Optimization demo example
 This example demonstrates the use of strategy attributes to perform optimizations on a simple functional language, as seen in the paper, specifically in Figures 1, 3, 6, and 7. Change into the `examples/rewriting-optimization-demo/` directory:
 ```
-cd examples/rewriting-optimization-demo/
+cd ~/examples/rewriting-optimization-demo/
 ```
 
 The Silver specification of this example language is provided in the `grammars/` subdirectory.  The abstract syntax, consisting of top-level function declarations, expressions and let-binding declarations, is given in `grammars/edu.umn.melt.rewritedemo/abstractsyntax/AbstractSyntax.sv`.  Figure 1 of the paper shows some of the attributes and productions that are to be found in this file.  Additional attributes, such as ``wrapPP`` are included here that are not seen in that figure. 
@@ -141,11 +141,20 @@ Change into the `examples/ableC-halide/` directory:
 % cd ~/examples/ableC-halide/
 ```
 
-The extension directory contains several subdirectories.  The specification of the extension is defined in the `grammars/` folder; the use of strategy attribute for normalization occurs in `grammars/edu.umn.cs.melt.exts.ableC.halide/abstractsyntax/IterStmt.sv`.  A number of example programs using the extension are provided in the `examples/` folder, the `tests/` folder contains more tests programs (including some with semantic errors), and the `modular_analyses/` folder contains specifications of analyses to ensure that composing with independent extensions will not introduce parser table conflicts or missing equations.  All of the examples and test cases may be built and run by running `make -j` at the top level, however this will take several minutes and is not required to run the examples.
+The extension directory contains several subdirectories.  The
+specification of the extension is defined in the `grammars/` folder;
+the use of strategy attribute for normalization occurs in
+`grammars/edu.umn.cs.melt.exts.ableC.halide/abstractsyntax/IterStmt.sv`.  
+To implement the translations of extension constructs into plain C
+code a number of strategy attributes are used.  These include the
+`simplifyNumericExprStep` strategy starting on line 43 and
+`preprocessLoop` starting on line 75.  This last strategy normalizes
+for-loops to simplify later stages of the translation.
+A number of example programs using the extension are provided in the `examples/` folder, the `tests/` folder contains more tests programs (including some with semantic errors), and the `modular_analyses/` folder contains specifications of analyses to ensure that composing with independent extensions will not introduce parser table conflicts or missing equations.  All of the examples and test cases may be built and run by running `make -j` at the top level, however this will take several minutes and is not required to run the examples.
 
 Change into the `examples/` directory:
 ```
-% cd ~/examples/
+% cd examples/
 ```
 
 A nontrivial example use of the extension is in `matmul.xc`.  This program provides two implementations of a matrix multiplication, one unoptimized and the other with a number of optimizing transformations applied.  This may be built and run by typing
@@ -166,7 +175,7 @@ In the `matmul.xc` program all for-loops were defined using an additional `foral
 % ./irregular.out
 ```
 
-You may also try editing `irregular.out` to change the loop expressions within the `transform {}` block, to see how effective the strategies are in normalizing complex loop conditions.
+You may also try editing `irregular.xc` to change the loop expressions within the `transform {}` block, to see how effective the strategies are in normalizing complex loop conditions.
 
 
 ## Use of strategy attributes in optimizing strategies for translation
