@@ -413,8 +413,12 @@ the bound expressions.
 #### Let Examples
 
 We have a file of examples of `let` typing, including both typable and
-untypable expressions.  This file can be run from the `camlLight`
-directory with
+untypable expressions.  To run this example, first we will need to
+compile the grammar from the `camlLight` directory with
+```
+./silver-compile
+```
+We can then run the file with the examples using
 ```
 ./run sample_programs/let_examples.demo
 ```
