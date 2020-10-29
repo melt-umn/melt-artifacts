@@ -3,8 +3,7 @@ FROM frekele/ant:1.10.1-jdk8u141
 ARG SILVER_BRANCH="v0.4.4"
 ARG ABLEC_BRANCH="v0.1.5"
 ARG EXTS_BRANCH="ableC-0.1.5"
-# TODO: sort out the release for this
-ARG HALIDE_BRANCH="master"
+ARG HALIDE_BRANCH="v0.1.1"
 
 # get dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends make git gcc libc6-dev sudo

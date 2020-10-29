@@ -16,11 +16,10 @@ rm -rf examples/*
 echo "Checking out examples..."
 mkdir -p examples
 cd examples
-# TODO: Sort out release for ableC-halide
-git clone -b master https://github.com/melt-umn/ableC-halide.git
 git clone -b v0.1.0 https://github.com/melt-umn/rewriting-optimization-demo.git
 git clone -b v0.1.2 https://github.com/melt-umn/lambda-calculus.git
 git clone -b v0.1.0 https://github.com/melt-umn/rewriting-regex-matching.git
+git clone -b v0.1.1 https://github.com/melt-umn/ableC-halide.git
 
 echo "Deleting unneeded files..."
 rm -rf */.git */Jenkinsfile
