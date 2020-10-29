@@ -63,9 +63,9 @@ contents of the archive:
 ```
 docker load -i melt-umn-implicit-monads.docker
 ```
-This may require superuser privileges.  This step only needs to be
-done once; the Docker image may then be run (explained in the next
-paragraph) without doing this step again.
+This may require superuser privileges (`sudo` on Linux).  This step
+only needs to be done once; the Docker image may then be run
+(explained in the next paragraph) without doing this step again.
 
 
 Once the image has been loaded, you can enter the Docker image with
@@ -584,8 +584,12 @@ the bound expressions.
 ##### Let Examples
 
 We have a file of examples of `let` typing, including both typable and
-untypable expressions.  This file can be run from the `camlLight`
-directory with
+untypable expressions.  To run this example, first we will need to
+compile the grammar from the `camlLight` directory with
+```
+./silver-compile
+```
+We can then run the file with the examples using
 ```
 ./run sample_programs/let_examples.demo
 ```
