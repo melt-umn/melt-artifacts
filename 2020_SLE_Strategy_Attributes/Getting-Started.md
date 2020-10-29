@@ -50,7 +50,7 @@ The home directory of the container contains several folders:
 * `bin/` contains the locally-installed executable scripts added on `PATH` to run `silver` and `silver-ableC`
 * `examples/` contains the actual examples corresponding to the strategy attributes paper:
   * `rewriting-optimization-demo/` is an example use of strategy attributes for a simple functional language used as a running example in the paper
-  * `rewriting-lambda-calculus/` is an implementation of the lambda calculus using strategy attributes and a comparison with an earlier mechanism for rewriting on undercoated terms in Silver, both based on an example from Kiama
+  * `lambda-calculus/` is an implementation of the lambda calculus using strategy attributes and a comparison with an earlier mechanism for rewriting on undercoated terms in Silver, both based on an example from Kiama
   * `rewriting-regex-matching/` contains an implementation of regex matching using Brozozowski derivatives, with alternative mechanisms for simplifying intermediate regexes using both strategy attribute and term rewriting
   * `ableC-halide` is an ableC extension based on the Halide EDSL for specifying optimizing transformations on nested `for`-loops; strategy attributes are used in normalizing loops to have the expected form before transformations are applied.
 

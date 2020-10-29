@@ -66,9 +66,9 @@ All of the examples may be easily be run at once by executing
 
 
 ## Lambda calculus example
-This example is an implementation of the untyped lambda-calculus, as seen in Section 5.1 and Figure 13 of Appendix B.1 of the paper. Change into the `examples/rewriting-optimization-demo/` directory:
+This example is an implementation of the untyped lambda-calculus, as seen in Section 5.1 and Figure 13 of Appendix B.1 of the paper. Change into the `examples/lambda-calculus/` directory:
 ```
-% cd ~/examples/rewriting-lambda-calculus/
+% cd ~/examples/lambda-calculus/
 ```
 
 The directory structure is similar to the previous example.  The strategy attributes for normalization to head-normal form are defined in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalStrategyAttr.sv` (a prior implementation of the same rewrite rules using a reflection-based mechanism for rewriting undecorated terms in Silver is given in `grammars/edu.umn.cs.melt.lambdacalc/abstractsyntax/EvalTermRewrite.sv`.)
