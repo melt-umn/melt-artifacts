@@ -83,7 +83,7 @@ A number of example terms with the name `*.lambda` are provided in the directory
 
 The compiled program can be run on a particular example (e.g. `e3.lambda`) by running
 ```
-% java -jar rewritedemo.jar e3.lambda
+% java -jar lambdacalculus.jar e3.lambda
 ```
 This pretty prints the original term and the term following normalization, for example with the above (corresponding to a computation of 2 + 3 using Church numerals):
 ```
@@ -179,4 +179,4 @@ You may also try editing `irregular.xc` to change the loop expressions within th
 
 
 ## Use of strategy attributes in optimizing strategies for translation
-The last use of strategy attributes described in the paper is their use in optimizing strategy expressions for more efficient translation, as a part of their implementation in the Silver compiler.  This is described in Section 5.4 and Figure 16 of Appendix B.4 in the paper.  As this use of strategy attributes is tightly coupled with the Silver compiler (and is run for every Silver build that involves strategy attributes) it is difficult to provide a straightforward demo.  However the complete source code of this application can be found in the `silver/` repository folder at `silver/grammars/silver/extension/strategyattr/StrategyExpr.sv`
+The last use of strategy attributes described in the paper is their use in optimizing strategy expressions for more efficient translation, as a part of their implementation in the Silver compiler.  This is described in Section 5.4 and Figure 16 of Appendix B.4 in the paper.  As this use of strategy attributes is tightly coupled with the Silver compiler (and is run for every Silver build that involves strategy attributes) it is difficult to provide a straightforward demo.  However the complete source code of this application can be found in the `silver/` repository folder at `silver/grammars/silver/extension/strategyattr/StrategyExpr.sv`.  The strategy attributes used for normalizing strategy expressions are provided near the top of this file, while the full abstract syntax for strategy expressions and attribute equations used in computing their translation are given beneath these strategies.
