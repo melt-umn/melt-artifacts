@@ -1,9 +1,10 @@
 FROM frekele/ant:1.10.1-jdk8u141
 
-# Change these to tags after releases are finished
-ARG SILVER_BRANCH="develop"
-ARG ABLEC_BRANCH="develop"
-ARG EXTS_BRANCH="develop"
+ARG SILVER_BRANCH="v0.4.4"
+ARG ABLEC_BRANCH="v0.1.5"
+ARG EXTS_BRANCH="ableC-0.1.5"
+# TODO: sort out the release for this
+ARG HALIDE_BRANCH="master"
 
 # get dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends make git gcc libc6-dev sudo
@@ -13,7 +14,7 @@ ENV PATH=$PATH:/root/bin
 # download silver
 RUN git clone -b ${SILVER_BRANCH} https://github.com/melt-umn/silver.git
 # get the latest jars
-RUN cd silver && ./update #&& ./deep-rebuild
+RUN cd silver && ./fetch-jars && ./deep-rebuild
 # remove symbolic links if they exist then install silver to bin directory
 RUN rm -f ~/bin/silver ~/bin/silver-custom && cd silver && ./support/bin/install-silver-bin
 # download ableC
@@ -30,7 +31,7 @@ RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/abl
 RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/ableC-algebraic-data-types.git
 RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/ableC-template-algebraic-data-types.git
 RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/ableC-unification.git
-RUN cd extensions && git clone -b ${EXTS_BRANCH} https://github.com/melt-umn/ableC-halide.git
+RUN cd extensions && git clone -b ${HALIDE_BRANCH} https://github.com/melt-umn/ableC-halide.git
 # setup silver-ableC
 RUN cd extensions/silver-ableC && ./bootstrap-compile
 #RUN cd extensions/silver-ableC && ./fetch-jars && ./self-compile
