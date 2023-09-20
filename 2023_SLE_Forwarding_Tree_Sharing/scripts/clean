@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -rf *~ *.tar *.tar.gz example-language/ ableC-extensions-with-sharing/ ableC-extensions-no-sharing/
+
+docker rmi melt-umn/tree-sharing -f

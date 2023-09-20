@@ -1,0 +1,9 @@
+
+This artifact demonstrates the tree sharing mechanisms introduced in our
+SLE paper "Sharing Trees and Contextual Information: 
+Re-imagining Forwarding in Attribute Grammars."  These new
+mechanisms allow for child trees to be shared
+between extension productions and their forward translation.  
+We demonstrate the use of these features in a simple example language
+(based on the one used in examples in the paper),
+and in a number of extensions to ableC.

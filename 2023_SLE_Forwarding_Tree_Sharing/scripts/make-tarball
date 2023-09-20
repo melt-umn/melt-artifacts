@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Build the artifact
+# with --no-cache to force a clean build of the docker image
+
+# Better error handling
+set -euxo pipefail
+
+DOCKER_IMAGE_NAME=melt-umn-tree-sharing.docker
+TARBALL_NAME="2020_SLE_Strategy_Attributes.tar.gz"
+EXAMPLES="example-language/ ableC-extensions-with-sharing/ ableC-extensions-no-sharing/"
+CONTENTS_LIST="$EXAMPLES ../Step-By-Step-Instructions.md ../Abstract.txt ../paper.pdf"
+
+EXAMPLE_BRANCH="develop"
+OLD_EXTS_BRANCH="develop"
+NEW_EXTS_BRANCH="feature/use-remote-dec"
+
+echo "Deleting old examples..."
+rm -rf $EXAMPLES
+
+echo "Checking out examples..."
+git clone -b ${EXAMPLE_BRANCH} https://github.com/melt-umn/tree-sharing-demo.git example-language
+
+mkdir -p ableC-extensions-no-sharing
+cd ableC-extensions-no-sharing
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-condition-tables.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-string.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-vector.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-constructor.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-closure.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-templating.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-algebraic-data-types.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-unification.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-prolog.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-rewriting.git
+git clone -b ${OLD_EXTS_BRANCH} https://github.com/melt-umn/ableC-halide.git
+cd ..
+
+# download extensions
+mkdir -p ableC-extensions-with-sharing
+cd ableC-extensions-with-sharing
+git clone -b ${NEW_EXTS_BRANCH} https://github.com/melt-umn/ableC-condition-tables.git
+git clone -b ${NEW_EXTS_BRANCH} https://github.com/melt-umn/ableC-closure.git
+git clone -b ${NEW_EXTS_BRANCH} https://github.com/melt-umn/ableC-algebraic-data-types.git
+git clone -b ${NEW_EXTS_BRANCH} https://github.com/melt-umn/ableC-prolog.git
+git clone -b ${NEW_EXTS_BRANCH} https://github.com/melt-umn/ableC-rewriting.git
+git clone -b ${NEW_EXTS_BRANCH} https://github.com/melt-umn/ableC-unification.git
+cd ..
+
+echo "Deleting unneeded files..."
+find $EXAMPLES -name .git -name Jenkinsfile -delete
+
+echo "Building docker image..."
+docker build -t melt-umn/tree-sharing . $@
+
+echo "Saving docker image..."
+docker save melt-umn/tree-sharing -o $DOCKER_IMAGE_NAME
+
+echo "Building artifact.tar.gz ..."
+tar czf $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
