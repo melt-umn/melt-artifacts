@@ -7,3 +7,5 @@ between extension productions and their forward translation.
 We demonstrate the use of these features in a simple example language
 (based on the one used in examples in the paper),
 and in a number of extensions to ableC.
+The software included here corresponds to version 0.5.0 of Silver
+and version 0.1.9 of ableC.
