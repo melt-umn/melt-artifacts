@@ -1,8 +1,8 @@
 FROM openjdk:11
 
-ARG SILVER_BRANCH="feature/use-data-nonterminals"
-ARG ABLEC_BRANCH="feature/use-remote-dec"
-ARG EXTS_BRANCH="develop"
+ARG SILVER_BRANCH="v0.5.0"
+ARG ABLEC_BRANCH="v0.1.9"
+ARG EXTS_BRANCH="ableC-0.1.9"
 
 # get dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends make git gcc libc6-dev sudo ant libgc-dev

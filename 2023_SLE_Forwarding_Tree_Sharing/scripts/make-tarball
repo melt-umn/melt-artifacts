@@ -9,11 +9,11 @@ set -euxo pipefail
 DOCKER_IMAGE_NAME=melt-umn-tree-sharing.docker
 TARBALL_NAME="2020_SLE_Strategy_Attributes.tar.gz"
 EXAMPLES="example-language/ ableC-extensions-with-sharing/ ableC-extensions-no-sharing/"
-CONTENTS_LIST="$EXAMPLES ../Step-By-Step-Instructions.md ../Abstract.txt ../paper.pdf"
+CONTENTS_LIST="$EXAMPLES ../Getting-Started.md ../Abstract.txt ../paper.pdf"
 
-EXAMPLE_BRANCH="develop"
-OLD_EXTS_BRANCH="develop"
-NEW_EXTS_BRANCH="feature/use-remote-dec"
+EXAMPLE_BRANCH="v0.1.0"
+OLD_EXTS_BRANCH="ableC-0.1.8"
+NEW_EXTS_BRANCH="ableC-0.1.9"
 
 echo "Deleting old examples..."
 rm -rf $EXAMPLES
