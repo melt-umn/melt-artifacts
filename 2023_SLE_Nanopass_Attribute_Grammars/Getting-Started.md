@@ -8,6 +8,9 @@ The archive containing the Docker image can be obtained from [melt.cs.umn.edu/me
 
 Download this file.
 
+A permanent archival version can also be found at [https://doi.org/10.13020/h1qa-s993](https://doi.org/10.13020/h1qa-s993).
+
+
 ## Setting Up Docker
 
 The Docker image may be loaded by running:
@@ -46,4 +49,7 @@ Navigating into the `nag` link should load the artifact, with our Go demo loaded
 
 The left-hand side pane is the attribute grammar specification.
 
-TODO
+## The Nanapass Go Compiler.
+
+The implemented portions of a nanopass Go compiler discussed in the paper can be found at [https://melt.cs.umn.edu/melt-artifacts/](https://melt.cs.umn.edu/melt-artifacts/).
+
