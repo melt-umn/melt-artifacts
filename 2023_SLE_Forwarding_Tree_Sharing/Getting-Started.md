@@ -17,6 +17,8 @@ Download this archive and inflate it:
 (On Windows there may not be this ``tar`` command and something else
 will need to be used.)
 
+A permanent archival version can also be found at [https://doi.org/10.13020/badh-qf44](https://doi.org/10.13020/badh-qf44).
+
 ## Organization
 
 The archive contains several folders with various examples:
