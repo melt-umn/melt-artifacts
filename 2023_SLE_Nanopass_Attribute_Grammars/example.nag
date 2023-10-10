@@ -1,6 +1,8 @@
+prod root(stmt: Stmt): Root;
+
 prod asgnStmt(lhs: string, rhs: Expr): Stmt;
-prod ifStmt(cond: Expr, then_: Expr): Stmt;
-prod ifElseStmt(cond: Expr, then_: Expr, else_: Expr): Stmt;
+prod ifStmt(cond: Expr, then_: Stmt): Stmt;
+prod ifElseStmt(cond: Expr, then_: Stmt, else_: Stmt): Stmt;
 prod seqStmt(lhs: Stmt, rhs: Stmt): Stmt;
 prod skipStmt(): Stmt;
 
@@ -19,6 +21,7 @@ prod negateExpr(e: Expr): Expr;
 prod notExpr(e: Expr): Expr;
 
 lang L0 {
+    Root.prods := { root },
     Expr.prods := {
         litExpr, varExpr, addExpr, mulExpr, subExpr, eqExpr, neExpr,
         gtExpr, ltExpr, gteExpr, lteExpr, negateExpr, notExpr
@@ -27,19 +30,86 @@ lang L0 {
 }
 
 lang L1 extends L0 {
-    Expr.prods -= { ifStmt }
-}
-lang L2 extends L0 {
-    Expr.prods -= { ifStmt }
+    Stmt.prods -= { ifStmt }
 }
 
-lang L1 extends L0 { Expr.prods -= { c } }
-lang L2 extends L1 { Expr.prods -= { b } }
-main(c()) { toL1, toL2 }
 transform toL1 from L0 to L1;
+
+aspect ifStmt {
+    this.toL1 := ifElseStmt(cond.toL1, then_.toL1, skipStmt());
+}
+
+lang L2 extends L1 {
+    Expr.prods -= { negateExpr }
+}
+
 transform toL2 from L1 to L2;
-prod a(): Expr;
-prod b(): Expr;
-prod c(): Expr;
-aspect c { this.toL1 := b(); }
-aspect b { this.toL2 := a(); }
+
+aspect negateExpr {
+    this.toL2 := subExpr(litExpr(0), e.toL2);
+}
+
+syn pp: string;
+
+lang L3 extends L2 {
+    Root.attrs := { pp },
+    Expr.attrs := { pp },
+    Stmt.attrs := { pp },
+}
+
+transform toL3 from L2 to L3; // no equations needed!
+
+aspect root {
+    this.pp := stmt.pp;
+}
+
+aspect asgnStmt {
+    this.pp := lhs ++ " := " ++ rhs.pp ++ ";\n";
+}
+
+aspect ifStmt {
+    this.pp := "if(" ++ cond.pp ++ ") {\n"
+            ++ then_.pp
+            ++ "}\n";
+}
+
+aspect ifElseStmt {
+    this.pp := "if(" ++ cond.pp ++ ") {\n"
+            ++ then_.pp
+            ++ "} else {\n"
+            ++ else_.pp
+            ++ "}\n";
+}
+
+aspect seqStmt {
+    this.pp := lhs.pp ++ rhs.pp;
+}
+
+aspect skipStmt {
+    this.pp := "skip;\n";
+}
+
+aspect litExpr { this.pp := toString(n); }
+aspect varExpr { this.pp := n; }
+
+aspect addExpr { this.pp := "(" ++ lhs.pp ++ " + " ++ rhs.pp ++ ")"; }
+aspect mulExpr { this.pp := "(" ++ lhs.pp ++ " * " ++ rhs.pp ++ ")"; }
+aspect subExpr { this.pp := "(" ++ lhs.pp ++ " - " ++ rhs.pp ++ ")"; }
+
+aspect eqExpr { this.pp := "(" ++ lhs.pp ++ " = " ++ rhs.pp ++ ")"; }
+aspect neExpr { this.pp := "(" ++ lhs.pp ++ " = " ++ rhs.pp ++ ")"; }
+aspect gtExpr { this.pp := "(" ++ lhs.pp ++ " > " ++ rhs.pp ++ ")"; }
+aspect ltExpr { this.pp := "(" ++ lhs.pp ++ " < " ++ rhs.pp ++ ")"; }
+aspect gteExpr { this.pp := "(" ++ lhs.pp ++ " >= " ++ rhs.pp ++ ")"; }
+aspect lteExpr { this.pp := "(" ++ lhs.pp ++ " <= " ++ rhs.pp ++ ")"; }
+
+aspect negateExpr { this.pp := "(" ++ " -" ++ e.pp ++ ")"; }
+aspect notExpr { this.pp := "(" ++ " !" ++ e.pp ++ ")"; }
+
+main(root(seqStmt(asgnStmt("x", litExpr(3)),
+                  ifStmt(ltExpr(negateExpr(varExpr("x")), litExpr(10)),
+                         asgnStmt("y", litExpr(1)))))) {
+  toL1,
+  toL2,
+  toL3,
+}
