@@ -7,9 +7,12 @@
 set -euxo pipefail
 
 DOCKER_IMAGE_NAME=melt-umn-tree-sharing.docker
-TARBALL_NAME="2020_SLE_Strategy_Attributes.tar.gz"
+TARBALL_NAME="2023_SLE_Forwarding_Tree_Sharing.tar.gz"
+ZIPFILE_NAME="2023_SLE_Forwarding_Tree_Sharing.zip"
 EXAMPLES="example-language/ ableC-extensions-with-sharing/ ableC-extensions-no-sharing/"
-CONTENTS_LIST="$EXAMPLES ../Getting-Started.md ../README.md ../Abstract.txt ../paper.pdf"
+MD_TEXT_FILES="Getting-Started.txt README.txt"
+OTHER_STUFF="Abstract.txt paper.pdf"
+CONTENTS_LIST="$EXAMPLES $MD_TEXT_FILES $OTHER_STUFF"
 
 EXAMPLE_BRANCH="v0.1.0"
 OLD_EXTS_BRANCH="ableC-0.1.8"
@@ -57,4 +60,15 @@ echo "Saving docker image..."
 docker save melt-umn/tree-sharing -o $DOCKER_IMAGE_NAME
 
 echo "Building artifact.tar.gz ..."
+for txt_file in $MD_TEXT_FILES; do
+  cp "../${txt_file%.txt}.md" $txt_file
+done
+for file in $OTHER_STUFF; do
+  cp "../$file" .
+done
 tar czf $TARBALL_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
+
+echo "Building artifact.zip ..."
+zip $ZIPFILE_NAME $DOCKER_IMAGE_NAME $CONTENTS_LIST
+
+rm $MD_TEXT_FILES $OTHER_STUFF
