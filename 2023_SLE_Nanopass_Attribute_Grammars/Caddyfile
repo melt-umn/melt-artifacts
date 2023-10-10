@@ -1,0 +1,6 @@
+http://* {
+	root * /www
+	file_server {
+		browse
+	}
+}

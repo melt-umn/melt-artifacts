@@ -1,0 +1,45 @@
+prod asgnStmt(lhs: string, rhs: Expr): Stmt;
+prod ifStmt(cond: Expr, then_: Expr): Stmt;
+prod ifElseStmt(cond: Expr, then_: Expr, else_: Expr): Stmt;
+prod seqStmt(lhs: Stmt, rhs: Stmt): Stmt;
+prod skipStmt(): Stmt;
+
+prod litExpr(n: number): Expr;
+prod varExpr(n: string): Expr;
+prod addExpr(lhs: Expr, rhs: Expr): Expr;
+prod mulExpr(lhs: Expr, rhs: Expr): Expr;
+prod subExpr(lhs: Expr, rhs: Expr): Expr;
+prod eqExpr(lhs: Expr, rhs: Expr): Expr;
+prod neExpr(lhs: Expr, rhs: Expr): Expr;
+prod gtExpr(lhs: Expr, rhs: Expr): Expr;
+prod ltExpr(lhs: Expr, rhs: Expr): Expr;
+prod gteExpr(lhs: Expr, rhs: Expr): Expr;
+prod lteExpr(lhs: Expr, rhs: Expr): Expr;
+prod negateExpr(e: Expr): Expr;
+prod notExpr(e: Expr): Expr;
+
+lang L0 {
+    Expr.prods := {
+        litExpr, varExpr, addExpr, mulExpr, subExpr, eqExpr, neExpr,
+        gtExpr, ltExpr, gteExpr, lteExpr, negateExpr, notExpr
+    },
+    Stmt.prods := { asgnStmt, ifStmt, ifElseStmt, seqStmt, skipStmt }
+}
+
+lang L1 extends L0 {
+    Expr.prods -= { ifStmt }
+}
+lang L2 extends L0 {
+    Expr.prods -= { ifStmt }
+}
+
+lang L1 extends L0 { Expr.prods -= { c } }
+lang L2 extends L1 { Expr.prods -= { b } }
+main(c()) { toL1, toL2 }
+transform toL1 from L0 to L1;
+transform toL2 from L1 to L2;
+prod a(): Expr;
+prod b(): Expr;
+prod c(): Expr;
+aspect c { this.toL1 := b(); }
+aspect b { this.toL2 := a(); }

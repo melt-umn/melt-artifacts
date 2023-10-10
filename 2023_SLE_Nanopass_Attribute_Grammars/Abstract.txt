@@ -1,0 +1,19 @@
+Compilers for feature-rich languages are complex; they perform many analyses
+and optimizations, and often lower complex language constructs into simpler
+ones. The nanopass compiler architecture manages this complexity by specifying
+the compiler as a sequence of many small transformations, over slightly
+different, but clearly defined, versions of the language that each perform a
+single straightforward action. This avoids errors that arise from attempting to
+solve multiple problems at once and allows for testing at each step.
+
+Attribute grammars are ill-suited for this architecture, primarily because they
+cannot identify the many versions of the language in a non-repetitive and
+type-safe way. We present a formulation of attribute grammars that addresses
+these concerns, called nanopass attribute grammars, that (ⅰ) identifies a
+collection of all language constructs and analyses (attributes), (ⅱ) concisely
+constructs specific (sub) languages from this set and transformations between
+them, and (ⅲ) specifies compositions of transformations to form nanopass
+compilers. The collection of all features can be statically typed and
+individual languages can be checked for well-definedness and circularity. We
+evaluate the approach by implementing a significant subset of the Go
+programming language in a prototype nanopass attribute grammar system.
