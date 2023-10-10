@@ -1,11 +1,11 @@
 
-This artifact demonstrates the tree sharing mechanisms introduced in our
-SLE paper "Sharing Trees and Contextual Information: 
-Re-imagining Forwarding in Attribute Grammars."  These new
-mechanisms allow for child trees to be shared
-between extension productions and their forward translation.  
-We demonstrate the use of these features in a simple example language
-(based on the one used in examples in the paper),
-and in a number of extensions to ableC.
-The software included here corresponds to version 0.5.0 of Silver
-and version 0.1.9 of ableC.
+This artifact demonstrates the tree sharing mechanisms introduced in
+our 2023 SLE paper "Sharing Trees and Contextual Information:
+Re-imagining Forwarding in Attribute Grammars." These new mechanisms
+allow for child trees to be shared between extension productions and
+their forward translation.  We demonstrate the use of these features
+in a simple example language (based on the one used in examples in the
+paper), and in a number of extensions to ableC.  The software included
+here corresponds to version 0.5.0 of Silver and version 0.1.9 of
+ableC.  The most recent versions of Silver and ableC can be found at
+https://melt.cs.umn.edu.
