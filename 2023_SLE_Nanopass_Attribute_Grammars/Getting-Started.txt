@@ -1,0 +1,70 @@
+# Getting Started Guide
+
+The instructions below provide an overview of how to build and run the
+artifact.
+
+## Obtaining the Archive
+
+The archive containing the Docker image can be obtained from
+https://melt.cs.umn.edu/melt-artifacts/2023_SLE_Nanopass_Attribute_Grammars.tar.gz
+
+Download this file.
+
+A permanent archival version can also be found at
+https://doi.org/10.13020/h1qa-s993
+
+Once the file is downloaded, extract it. On Unix, this is most easily done with
+the tar command on the .tar.gz file:
+
+    $ tar zxf 2023_SLE_Nanopass_Attribute_Grammars.tar.gz
+
+On Windows, you can use the Extract functionality built into Windows Explorer
+on the .zip file that is present at the doi.org URL.
+
+After extracting, you should have a file named
+2023_SLE_Nanopass_Attribute_Grammars.docker.
+
+## Setting Up Docker
+
+The Docker image may be loaded by running:
+
+    $ docker load -i 2023_SLE_Nanopass_Attribute_Grammars.docker
+
+The container may then be run with:
+
+    $ docker run -itp 8000:80 melt-umn/nanopass-ags
+
+If TCP port 8000 is already in use on your system, you can choose another one.
+However, port 80 should not be changed, as this is the port inside the
+container.
+
+## Basic Testing
+
+Open a web browser and navigate to http://localhost:8000/.
+
+If you changed the port above, you should change the port in the URL as well.
+
+If you get a "Connection denied" error, but the Docker container appears to
+have started successfully, a local firewall may be preventing the connection.
+Contact your system administrator for assistance.
+
+You browser should then display a directory listing of files in the container.
+
+These should include:
+
+- nag/: The browser-runnable artifact.
+- src/: The extracted and compiled source code of the artifact.
+- src.tar.gz: The compressed source code of the artifact.
+
+Navigating into the `nag` link should load the artifact, with a demo program loaded.
+
+The left-hand side pane is the attribute grammar specification.
+The right-hand side is the output is the result of running the program.
+
+Since the demo includes a pp attribute defined on the root nonterminal, it is evaluated and printed.
+If one is not defined, the underlying term will be shown.
+
+## The Nanopass Go Compiler.
+
+The implemented portions of a nanopass Go compiler discussed in the paper can be found at [https://melt.cs.umn.edu/melt-artifacts/](https://melt.cs.umn.edu/melt-artifacts/).
+
